@@ -1,0 +1,171 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{csdn_vending_machine_design_2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=3b398f1fc784a46f612c14e0fd9c4b1f}{%
+           family={CSDN},
+           familyi={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \strng{fullhash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \strng{bibnamehash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \strng{authorbibnamehash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \strng{authornamehash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \strng{authorfullhash}{3b398f1fc784a46f612c14e0fd9c4b1f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{自动售货机系统设计：掌握需求到架构的全面解析，打造极致用户体验}
+      \verb{urlraw}
+      \verb https://wenku.csdn.net/column/65qmzxzehf
+      \endverb
+      \verb{url}
+      \verb https://wenku.csdn.net/column/65qmzxzehf
+      \endverb
+    \endentry
+    \entry{chengli_ticket_machine_2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=9a42eda8f2b64335fe8b44fa49504582}{%
+           family={程力科技有限公司},
+           familyi={程\bibinitperiod}}}%
+      }
+      \strng{namehash}{9a42eda8f2b64335fe8b44fa49504582}
+      \strng{fullhash}{9a42eda8f2b64335fe8b44fa49504582}
+      \strng{bibnamehash}{9a42eda8f2b64335fe8b44fa49504582}
+      \strng{authorbibnamehash}{9a42eda8f2b64335fe8b44fa49504582}
+      \strng{authornamehash}{9a42eda8f2b64335fe8b44fa49504582}
+      \strng{authorfullhash}{9a42eda8f2b64335fe8b44fa49504582}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{智能售票機}
+      \verb{urlraw}
+      \verb https://www.cheng-li93367164.com.tw/products_detail/77
+      \endverb
+      \verb{url}
+      \verb https://www.cheng-li93367164.com.tw/products_detail/77
+      \endverb
+    \endentry
+    \entry{lazada_vending_machine_2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=fa197b4df6b4bb5d6726f6441ac8389a}{%
+           family={Lazada},
+           familyi={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \strng{fullhash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \strng{bibnamehash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \strng{authorbibnamehash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \strng{authornamehash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \strng{authorfullhash}{fa197b4df6b4bb5d6726f6441ac8389a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Vending Machine DC 12V and a Spiral Spring Set Arcade Game Coin Operated Machine Accessories Casino Selling Goods Machine}
+      \verb{urlraw}
+      \verb https://www.lazada.com.ph/products/vending-machine-dc-12v-and-a-spiral-spring-set-arcade-game-coin-operated-machine-accessories-casino-selling-goods-machine-i3196798144.html
+      \endverb
+      \verb{url}
+      \verb https://www.lazada.com.ph/products/vending-machine-dc-12v-and-a-spiral-spring-set-arcade-game-coin-operated-machine-accessories-casino-selling-goods-machine-i3196798144.html
+      \endverb
+    \endentry
+    \entry{storm_vending_machine_2019}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b12c8a1269d8e87fd5120c20a32e2316}{%
+           family={風傳媒},
+           familyi={風\bibinitperiod}}}%
+      }
+      \strng{namehash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \strng{fullhash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \strng{bibnamehash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \strng{authorbibnamehash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \strng{authornamehash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \strng{authorfullhash}{b12c8a1269d8e87fd5120c20a32e2316}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{日本販賣機大解密！從零食到生鮮，這些販賣機你見過嗎？}
+      \verb{urlraw}
+      \verb https://www.storm.mg/lifestyle/719773
+      \endverb
+      \verb{url}
+      \verb https://www.storm.mg/lifestyle/719773
+      \endverb
+    \endentry
+    \entry{taobao_product_2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=393fff715330a425c6414a6b4a49aa71}{%
+           family={淘寶網},
+           familyi={淘\bibinitperiod}}}%
+      }
+      \strng{namehash}{393fff715330a425c6414a6b4a49aa71}
+      \strng{fullhash}{393fff715330a425c6414a6b4a49aa71}
+      \strng{bibnamehash}{393fff715330a425c6414a6b4a49aa71}
+      \strng{authorbibnamehash}{393fff715330a425c6414a6b4a49aa71}
+      \strng{authornamehash}{393fff715330a425c6414a6b4a49aa71}
+      \strng{authorfullhash}{393fff715330a425c6414a6b4a49aa71}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{商品編號 547731762321}
+      \verb{urlraw}
+      \verb https://world.taobao.com/item/547731762321.htm
+      \endverb
+      \verb{url}
+      \verb https://world.taobao.com/item/547731762321.htm
+      \endverb
+    \endentry
+    \entry{eprice_cashless_vending_machine_2025}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=eb00c0aaa68dc252d40b3b31b7238a7a}{%
+           family={生活討論區},
+           familyi={生\bibinitperiod},
+           prefix={ePrice},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \strng{fullhash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \strng{bibnamehash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \strng{authorbibnamehash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \strng{authornamehash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \strng{authorfullhash}{eb00c0aaa68dc252d40b3b31b7238a7a}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{霸氣任性不收現金的販賣機}
+      \verb{urlraw}
+      \verb https://m.eprice.com.tw/life/talk/6/5518840/1
+      \endverb
+      \verb{url}
+      \verb https://m.eprice.com.tw/life/talk/6/5518840/1
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

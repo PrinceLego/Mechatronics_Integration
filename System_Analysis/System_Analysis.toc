@@ -1,0 +1,23 @@
+\contentsline {section}{\numberline {1}\centering 引言}{1}{}%
+\contentsline {section}{\numberline {2}\centering 整體功能}{1}{}%
+\contentsline {subsection}{\numberline {2.1}商品展示與選擇}{1}{}%
+\contentsline {subsection}{\numberline {2.2}支付處理}{2}{}%
+\contentsline {subsection}{\numberline {2.3}商品出貨}{2}{}%
+\contentsline {subsection}{\numberline {2.4}庫存管理}{2}{}%
+\contentsline {subsection}{\numberline {2.5}故障診斷}{2}{}%
+\contentsline {section}{\numberline {3}\centering 機械結構}{2}{}%
+\contentsline {subsection}{\numberline {3.1}外殼}{3}{}%
+\contentsline {subsection}{\numberline {3.2}商品儲存區}{3}{}%
+\contentsline {subsection}{\numberline {3.3}商品輸送機構}{3}{}%
+\contentsline {subsection}{\numberline {3.4}取貨口}{4}{}%
+\contentsline {section}{\numberline {4}\centering 致動器配置}{4}{}%
+\contentsline {subsection}{\numberline {4.1}直流馬達}{4}{}%
+\contentsline {section}{\numberline {5}\centering 感測器配置}{5}{}%
+\contentsline {subsection}{\numberline {5.1}光電感測器}{5}{}%
+\contentsline {subsection}{\numberline {5.2}硬幣識別器}{5}{}%
+\contentsline {subsection}{\numberline {5.3}溫度感測器}{6}{}%
+\contentsline {subsection}{\numberline {5.4}庫存感測器}{7}{}%
+\contentsline {subsection}{\numberline {5.5}支付模組}{7}{}%
+\contentsline {section}{\numberline {6}\centering 人機介面設計}{7}{}%
+\contentsline {subsection}{\numberline {6.1}操作介面}{7}{}%
+\contentsline {section}{\numberline {7}\centering 參考文獻}{8}{}%
