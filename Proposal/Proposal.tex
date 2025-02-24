@@ -1,0 +1,232 @@
+\documentclass[12pt]{article}       % 設定文件類型為 article，字體大小為 12pt
+\usepackage[T1]{fontenc}            % 設定 T1 字型編碼，確保特殊字元的正確顯示
+\usepackage{lmodern}                % 強制使用 Latin Modern 字型，提高可讀性和相容性
+\usepackage{fontspec}               % 允許使用 OpenType 和 TrueType 字型
+\usepackage{graphicx}               % 支援插入圖片
+\usepackage{amsmath}                % 提供數學環境和公式支持
+\usepackage{csquotes}               % 提供引用格式支援
+\usepackage{comment}                % 提供多行註解
+\usepackage{ragged2e}
+\usepackage{float}
+
+%biber Proposal
+
+%=================================================={{{參考文獻設定}}}==================================================
+
+\usepackage[style=ieee, maxnames=99]{biblatex}          % 設定參考文獻格式為 IEEE，最多顯示 99 個作者
+\addbibresource{Proposal.bib}                       % 添加參考文獻檔案 references.bib
+\renewcommand{\bibfont}{\fontspec{Times New Roman}}     % 設定參考文獻字體為 Times New Roman
+\renewcommand{\UrlFont}{\fontspec{Times New Roman}}     % 設定 URL 連結字體為 Times New Roman
+\DeclareFieldFormat{url}{\url{#1}}                      % 格式化 URL                          % 引用你的 .bib 文件
+
+%=================================================={{{目錄設定}}}==================================================
+
+\usepackage{tocloft} % 自訂目錄格式
+
+% 設定目錄的點線填充樣式
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}           % 章節（section）
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}        % 小節（subsection）
+\renewcommand{\cftsubsubsecleader}{\cftdotfill{\cftdotsep}}     % 子小節（subsubsection）
+
+% 設定圖目錄與表目錄的點線
+\renewcommand{\cftdotsep}{1}  % 設定點的間距，使其在所有目錄（含圖、表）中都有效
+
+% 設定目錄標題格式，使目錄、圖目錄、表目錄標題一致
+\renewcommand{\contentsname}{\centering \LARGE \textbf{目錄}}    % 目錄標題置中，加粗
+\renewcommand{\listfigurename}{\centering \LARGE \textbf{圖目錄}} % 圖目錄標題置中，加粗
+\renewcommand{\listtablename}{\centering \LARGE \textbf{表目錄}} % 表目錄標題置中，加粗
+
+
+%=================================================={{{字體設定}}}==================================================
+
+% 設定英文字體
+\newfontface\englishfont{Times New Roman}               % 自訂英文字體命令 \englishfont，使用 Times New Roman
+
+\setmainfont[
+    ItalicFont={Times New Roman Italic},                % 設定斜體
+    BoldFont={Times New Roman Bold},                    % 設定粗體
+    BoldItalicFont={Times New Roman Bold Italic}        % 設定粗斜體
+]{Times New Roman}                                      % 設定主要英文字體為 Times New Roman
+
+% 設定中文字體
+
+\usepackage{xeCJK}                                      % 使用 xeCJK 宏包以支援中文
+\renewcommand{\figurename}{圖}                           % 設定圖表名稱
+\renewcommand{\tablename}{表}                            % 修改表格標題為「表」
+\setCJKmainfont[BoldFont={標楷體-繁}, ItalicFont={標楷體-繁}] {標楷體-繁}
+
+%=================================================={{{版面設定}}}==================================================
+
+% 設定頁面邊界，適用 A4 紙張
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm, a4paper]{geometry}
+
+% 設定行距與段落格式
+\usepackage{setspace}
+\onehalfspacing % 設定 1.5 倍行距
+\setlength{\parskip}{6pt} % 設定段落間距 6pt
+\setlength{\parindent}{2em} % 設定段落首行縮排 2 個字元
+
+%=============================================================================================================================
+%=============================================================================================================================
+%=============================================================================================================================
+
+\begin{document}
+%=================================================={{{封面}}}==================================================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm} % 增加上方間距
+
+    {\LARGE \textbf{元智大學工程學院機械工程學系}} \\[0.5cm] % 標題較大且加粗
+    {\LARGE {Department of Mechanical Engineering}} \\[0.5cm] % 標題較大且加粗
+    {\LARGE {College of Engineering}} \\[0.5cm]
+    {\LARGE {Yuan Ze University}}
+
+    \vfill % 這一行讓前面的資訊靠上排列
+
+    {\LARGE{[XX機電整合系統] 之功能與系統架構剖析}} % 這行會上下左右完全置中
+
+    \vfill % 這一行讓後面的資訊靠下排列
+
+    {\LARGE {王子晨}}\\[0.5cm]
+    {\LARGE {Tzu-Chen Wang}}\\[3.5cm]
+    {\LARGE {指導教授：鄭穎仁\hspace{0.5cm}博士}}\\[0.5cm]
+
+\end{titlepage}
+\newpage
+%=================================================={{{封面}}}==================================================
+
+\pagenumbering{roman}  
+\setcounter{page}{1}  % 從 I 開始
+
+%=================================================={{{中文摘要}}}==================================================
+
+\section*{\centering 摘要}  % 只讓標題置中
+\addcontentsline{toc}{section}{摘要}  % 手動加入摘要到目錄
+
+%==============================摘要內容==============================
+
+\hspace{2em}
+本研究計畫旨在開發一套智慧交通巡檢系統，利用四軸飛行載具（Unmanned Aerial Vehicle, UAV）進行違規停車車輛的偵測。
+不同於以往先判斷紅線位置再確認車輛是否違規的方法，本研究透過四軸飛行器的GPS定位資訊來判斷車輛是否違規，避免車輛停在紅線上或完全遮掩紅線的情況。
+由於系統僅檢視違規區域，此方法還能加快巡邏速度，提升巡邏效率。
+
+本系計畫統採用YOLOv7物件偵測模型進行即時車輛辨識，結合飛行器的姿態與相機拍攝角度，
+利用逆透視變換(Inverse Perspective Mapping，IPM)定位，將偵測結果轉換為地面上的絕對位置，這樣能夠快速確定違規停車車輛的位置。
+透過事先建立的資料庫，無人機將比對飛越指定區域所拍攝的影像，並即時偵測違規車輛，記錄其位置。
+該系統的優勢在於高效的監控能力，能夠大幅減少設備投資成本，並提升違規車輛檢測的靈活性和即時性。
+
+\vspace{1.5em}
+\noindent 關鍵字：即時物件偵測、四旋翼無人機、空間對位
+%==============================摘要內容==============================
+\newpage  % 插入換頁命令，將目錄和後續內容分開
+
+%=================================================={{{英文摘要}}}==================================================
+\section*{\centering Abstract}  % 只讓標題置中
+\addcontentsline{toc}{section}{Abstract}  % 手動加入摘要到目錄
+%==============================摘要內容==============================
+\hspace{2em}This research aims to develop an intelligent traffic inspection system utilizing unmanned aerial vehicles (UAVs) to detect illegally parked vehicles.
+Unlike conventional methods that first identify the location of red lines and then verify whether vehicles are violating parking regulations, this system determines whether a vehicle is in violation by using the UAV's GPS positioning information, preventing vehicles from parking on or completely covering red lines.
+Since the system only inspects the violation areas, this approach helps speed up patrol operations and enhance overall patrol efficiency.
+
+This research adopts the YOLOv7 object detection model for real-time vehicle identification, combined with the UAV's attitude and camera angle.
+By using Inverse Perspective Mapping, the system locates and converts the detection results into absolute ground positions, allowing for quick identification of illegally parked vehicles.
+Through a pre-established database, the UAV compares the images captured while flying over designated areas and immediately detects violation vehicles, recording their locations. The advantage of this system lies in its efficient monitoring capability, significantly reducing equipment investment costs and improving the flexibility and immediacy of illegal parking detection.
+
+\vspace{1.5em}
+\noindent Keyword: Real-time Object Detection, Quadcopter, Georeferencing
+%==============================摘要內容==============================
+\newpage  % 插入換頁命令，將目錄和後續內容分開
+
+%=================================================={{{目錄}}}==================================================
+
+\begin{center}
+    \tableofcontents    % 生成目錄
+%========================={{{可有可無}}}=========================
+    \newpage 
+
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % 暫時關閉目錄深度，讓圖目錄不顯示在目錄中
+    \listoffigures      % 生成圖目錄
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{2}} % 恢復目錄深度（如果你的章節結構需要更深層級，請調整數值）
+    \newpage  
+    \listoftables       % 生成表目錄
+
+%========================={{{可有可無}}}=========================
+\end{center} 
+%=================================================={{{內容開始}}}==================================================
+\newpage  % 插入換頁命令，將目錄和後續內容分開
+\pagenumbering{arabic}  % 開始使用阿拉伯數字頁碼
+\setcounter{page}{1}  % 設定頁碼從 1 開始
+
+%\englishfont{this is an example of mixed English and Chinese.}
+
+\section{\centering 緒論}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+無人機（Unmanned Aerial Vehicle, UAV）技術近年來快速發展，整合各種附加設備並隨著飛行控制與自動化技術的成熟，在軍事、執法及科技應用領域取得顯著成效。
+四軸旋翼無人機因其安全性高、成本低的優勢，已廣泛應用於各種場景，其中攝影與錄影功能尤為重要。
+無人機擁有比傳統攝影設備更廣的視角，且受環境限制較小，使其在大範圍場景捕捉方面表現優異，優於傳統監控方式。
+
+
+%==============================內文==============================
+
+
+
+\section{\centering 參考文獻}
+\vspace{-3.5em}  % 減少與上方內容的間距
+\renewcommand{\refname}{}  % 去除 "References" 標題
+%\printbibliography  % 列出參考文獻
+
+\end{document}
+
+%=============================================================================================================================
+%=============================================================================================================================
+%=============================================================================================================================
+
+
+\begin{comment}
+
+\section{\centering 緒論}
+\subsection{研究問題} 
+\subsubsection{違規車輛偵測}
+    
+    %==============================圖片==============================
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{截圖 2025-01-24 03.21.17.jpg}     %圖片檔案名稱
+    \caption{這是圖片的標題}    %圖片檔案名稱
+    \label{fig:example2}    %為圖片添加標籤
+    %如\ref{fig:example1}所示
+\end{figure}
+    
+    %==============================數學公式==============================
+\begin{align}
+    a &= b + c \label{eq:1}
+    \\
+    d &= e - f \label{eq:2}
+    %式label{eq:2}
+\end{align}
+    
+    %==============================表格==============================
+\begin{table}[H]
+    \caption{MSI GP76 Leopard規格}
+    \vspace{12pt} % 增加空格
+    \renewcommand{\arraystretch}{1.5} % 調整行距以垂直置中
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{元件} & \textbf{規格}                 \\ \hline
+        中央處理器       & Intel(R) Core(TM) i7-10870H \\ \hline
+        記憶體         & DDR4 16GB                   \\ \hline
+        硬碟          & 1TB SSD                     \\ \hline
+        顯卡          & NVIDIA® GeForce® RTX 3060   \\ \hline
+        作業系統        & Ubuntu 18.04                \\ \hline
+        電池          & 4-Cell 65 Battery (Whr)     \\ \hline
+    \end{tabular}
+    \label{tab:MSI GP76 Leopard}
+    %(具體規格詳見表\ref{tab:MSI GP76 Leopard})
+\end{table}
+    
+    \end{comment}
+        

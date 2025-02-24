@@ -1,0 +1,9 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'Proposal.blg'
+[38] biber-darwin:340> INFO - === Tue Feb 25, 2025, 03:55:25
+[47] Biber.pm:419> INFO - Reading 'Proposal.bcf'
+[92] Biber.pm:979> INFO - Found 0 citekeys in bib section 0
+[100] bbl.pm:660> INFO - Writing 'Proposal.bbl' with encoding 'UTF-8'
+[100] bbl.pm:763> INFO - Output to Proposal.bbl
+[100] Biber.pm:131> WARN - The file 'Proposal.bcf' does not contain any citations!
+[100] Biber.pm:133> INFO - WARNINGS: 1
