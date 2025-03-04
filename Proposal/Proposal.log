@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.1.24)  25 FEB 2025 03:55
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.1.24)  4 MAR 2025 11:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -759,7 +759,7 @@ Package biblatex Info: Reference segment=0 on input line 73.
 
 [1
 
-] [1] [2] (./Proposal.toc
+] [1] (./Proposal.toc
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -786,15 +786,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 \tf@toc=\write5
 \openout5 = `Proposal.toc'.
 
- [3] (./Proposal.lof)
-\tf@lof=\write6
-\openout6 = `Proposal.lof'.
-
- [4] (./Proposal.lot)
-\tf@lot=\write7
-\openout7 = `Proposal.lot'.
-
- [5] [1] (./Proposal.aux)
+ [2] [1] (./Proposal.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2022/08/05>
@@ -804,12 +796,12 @@ Package logreq Info: Writing requests to 'Proposal.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 15589 strings out of 474773
- 358417 string characters out of 5757724
+ 15575 strings out of 474773
+ 358223 string characters out of 5757724
  1929839 words of memory out of 5000000
- 37544 multiletter control sequences out of 15000+600000
+ 37536 multiletter control sequences out of 15000+600000
  572835 words of font info for 72 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  79i,5n,93p,1181b,3688s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on Proposal.xdv (7 pages, 41924 bytes).
+Output written on Proposal.xdv (4 pages, 46080 bytes).

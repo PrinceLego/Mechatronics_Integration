@@ -196,14 +196,6 @@ INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/lm/omxlmex.fd
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/lm/omxlmex.fd
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/lm/lmex10.tfm
 OUTPUT Proposal.toc
-INPUT ./Proposal.lof
-INPUT ./Proposal.lof
-INPUT Proposal.lof
-OUTPUT Proposal.lof
-INPUT ./Proposal.lot
-INPUT ./Proposal.lot
-INPUT Proposal.lot
-OUTPUT Proposal.lot
 INPUT Proposal.aux
 INPUT Proposal.run.xml
 OUTPUT Proposal.run.xml

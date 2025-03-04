@@ -1,17 +1,17 @@
 # Fdb version 4
-["biber Proposal"] 1740426922.48088 "Proposal.bcf" "Proposal.bbl" "Proposal" 1740426927.89267 0
-  "Proposal.bcf" 1740426927.50163 106802 4d342796a27e37dcc1dc35cefced32cf "xelatex"
+["biber Proposal"] 1740426922.48088 "Proposal.bcf" "Proposal.bbl" "Proposal" 1741058371.58928 0
+  "Proposal.bcf" 1741058371.22083 106802 4d342796a27e37dcc1dc35cefced32cf "xelatex"
   (generated)
   "Proposal.bbl"
   "Proposal.blg"
   (rewritten before read)
-["xdvipdfmx"] 1740426927.55272 "Proposal.xdv" "Proposal.pdf" "Proposal" 1740426927.89354 0
-  "Proposal.xdv" 1740426927.50251 41924 34b541c998d943929b61c043ea1a0b07 "xelatex"
+["xdvipdfmx"] 1741058371.27193 "Proposal.xdv" "Proposal.pdf" "Proposal" 1741058371.59013 0
+  "Proposal.xdv" 1741058371.22163 46080 9ef8b9aa37979a6123627bd3ff67111e "xelatex"
   (generated)
   "Proposal.pdf"
   (rewritten before read)
-["xelatex"] 1740426926.48743 "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" "Proposal.xdv" "Proposal" 1740426927.89274 0
-  "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" 1740426868.69618 12568 fb3bc66cacb3f2a7a1790582f0278b63 ""
+["xelatex"] 1741058370.11421 "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" "Proposal.xdv" "Proposal" 1741058371.58934 0
+  "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" 1741058369.91163 10748 762dea82465a54b1fddecc9c77dad52b ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1136768653 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/lm/ec-lmr12.tfm" 1254269338 12092 7b1546e2d096cfd5dcbd4049b0b1ec2e ""
@@ -98,19 +98,15 @@
   "/usr/local/texlive/2024/texmf-dist/web2c/texmf.cnf" 1708706663 41649 5d6ae549fbbcb850a863f69aa41f3d10 ""
   "/usr/local/texlive/2024/texmf-var/web2c/xetex/xelatex.fmt" 1737650810 10850157 bde4cfcbaa765257cb63cb49a5eb9e78 ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Proposal.aux" 1740426927.50021 714 45af3d3a900ca3d4680c9b208a9769f8 "xelatex"
+  "Proposal.aux" 1741058371.21958 1701 d0dfbe37bb9e70540da34e5a45330115 "xelatex"
   "Proposal.bbl" 1740426925.36244 466 ee04f40f768daeed26442158e95aba61 "biber Proposal"
-  "Proposal.lof" 1740426927.49444 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
-  "Proposal.lot" 1740426927.49545 0 d41d8cd98f00b204e9800998ecf8427e "xelatex"
-  "Proposal.run.xml" 1740426927.50234 2463 65bcef20e6b2afd71092a736d0fd6b41 "xelatex"
-  "Proposal.tex" 1740426868.69618 12568 fb3bc66cacb3f2a7a1790582f0278b63 ""
-  "Proposal.toc" 1740426927.50246 329 1e4000199f804fc05102a3647c1b022b "xelatex"
+  "Proposal.run.xml" 1741058371.22147 2463 65bcef20e6b2afd71092a736d0fd6b41 "xelatex"
+  "Proposal.tex" 1741058369.91163 10748 762dea82465a54b1fddecc9c77dad52b ""
+  "Proposal.toc" 1741058371.22158 978 197ec87f99688f721cfdf8079f9f2264 "xelatex"
   (generated)
   "Proposal.aux"
   "Proposal.bcf"
-  "Proposal.lof"
   "Proposal.log"
-  "Proposal.lot"
   "Proposal.run.xml"
   "Proposal.toc"
   "Proposal.xdv"

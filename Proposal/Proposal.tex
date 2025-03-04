@@ -83,13 +83,12 @@
 
     \vfill % 這一行讓前面的資訊靠上排列
 
-    {\LARGE{[XX機電整合系統] 之功能與系統架構剖析}} % 這行會上下左右完全置中
+    {\LARGE{機電整合期末專題企劃書}} % 這行會上下左右完全置中
 
     \vfill % 這一行讓後面的資訊靠下排列
 
-    {\LARGE {王子晨}}\\[0.5cm]
-    {\LARGE {Tzu-Chen Wang}}\\[3.5cm]
-    {\LARGE {指導教授：鄭穎仁\hspace{0.5cm}博士}}\\[0.5cm]
+    {\LARGE {1100826 王子晨}}\\[6cm]
+    {\LARGE {指導教授：吳昌暉\hspace{0.5cm}博士}}\\[0.5cm]
 
 \end{titlepage}
 \newpage
@@ -120,37 +119,11 @@
 %==============================摘要內容==============================
 \newpage  % 插入換頁命令，將目錄和後續內容分開
 
-%=================================================={{{英文摘要}}}==================================================
-\section*{\centering Abstract}  % 只讓標題置中
-\addcontentsline{toc}{section}{Abstract}  % 手動加入摘要到目錄
-%==============================摘要內容==============================
-\hspace{2em}This research aims to develop an intelligent traffic inspection system utilizing unmanned aerial vehicles (UAVs) to detect illegally parked vehicles.
-Unlike conventional methods that first identify the location of red lines and then verify whether vehicles are violating parking regulations, this system determines whether a vehicle is in violation by using the UAV's GPS positioning information, preventing vehicles from parking on or completely covering red lines.
-Since the system only inspects the violation areas, this approach helps speed up patrol operations and enhance overall patrol efficiency.
-
-This research adopts the YOLOv7 object detection model for real-time vehicle identification, combined with the UAV's attitude and camera angle.
-By using Inverse Perspective Mapping, the system locates and converts the detection results into absolute ground positions, allowing for quick identification of illegally parked vehicles.
-Through a pre-established database, the UAV compares the images captured while flying over designated areas and immediately detects violation vehicles, recording their locations. The advantage of this system lies in its efficient monitoring capability, significantly reducing equipment investment costs and improving the flexibility and immediacy of illegal parking detection.
-
-\vspace{1.5em}
-\noindent Keyword: Real-time Object Detection, Quadcopter, Georeferencing
-%==============================摘要內容==============================
-\newpage  % 插入換頁命令，將目錄和後續內容分開
 
 %=================================================={{{目錄}}}==================================================
 
 \begin{center}
     \tableofcontents    % 生成目錄
-%========================={{{可有可無}}}=========================
-    \newpage 
-
-    \addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % 暫時關閉目錄深度，讓圖目錄不顯示在目錄中
-    \listoffigures      % 生成圖目錄
-    \addtocontents{toc}{\protect\setcounter{tocdepth}{2}} % 恢復目錄深度（如果你的章節結構需要更深層級，請調整數值）
-    \newpage  
-    \listoftables       % 生成表目錄
-
-%========================={{{可有可無}}}=========================
 \end{center} 
 %=================================================={{{內容開始}}}==================================================
 \newpage  % 插入換頁命令，將目錄和後續內容分開
@@ -159,18 +132,53 @@ Through a pre-established database, the UAV compares the images captured while f
 
 %\englishfont{this is an example of mixed English and Chinese.}
 
-\section{\centering 緒論}
+\section{\centering 整體功能}
 
 \subsection{研究背景} 
 %==============================內文==============================
 \hspace{2em}
-無人機（Unmanned Aerial Vehicle, UAV）技術近年來快速發展，整合各種附加設備並隨著飛行控制與自動化技術的成熟，在軍事、執法及科技應用領域取得顯著成效。
-四軸旋翼無人機因其安全性高、成本低的優勢，已廣泛應用於各種場景，其中攝影與錄影功能尤為重要。
-無人機擁有比傳統攝影設備更廣的視角，且受環境限制較小，使其在大範圍場景捕捉方面表現優異，優於傳統監控方式。
-
 
 %==============================內文==============================
 
+\section{\centering 機械結構草圖}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+
+%==============================內文==============================
+
+\section{\centering 致動器的功能與數目列表}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+
+%==============================內文==============================
+
+\section{\centering 感測器的功能與數目列表}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+
+%==============================內文==============================
+
+\section{\centering 演算法設計}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+
+%==============================內文==============================
+
+\section{\centering 人機界面的功能概述}
+
+\subsection{研究背景} 
+%==============================內文==============================
+\hspace{2em}
+
+%==============================內文==============================
 
 
 \section{\centering 參考文獻}
