@@ -16,5 +16,223 @@
   {}
 \endgroup
 
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{JustMakeIt_TT_Motor}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=c205d712a43fa90c3d6f5df92060edbb}{%
+           family={JustMakeIt},
+           familyi={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{c205d712a43fa90c3d6f5df92060edbb}
+      \strng{fullhash}{c205d712a43fa90c3d6f5df92060edbb}
+      \strng{bibnamehash}{c205d712a43fa90c3d6f5df92060edbb}
+      \strng{authorbibnamehash}{c205d712a43fa90c3d6f5df92060edbb}
+      \strng{authornamehash}{c205d712a43fa90c3d6f5df92060edbb}
+      \strng{authorfullhash}{c205d712a43fa90c3d6f5df92060edbb}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{TT玩具馬達}
+      \verb{urlraw}
+      \verb https://hackmd.io/@JustMakeIt/HJI5gkpSo
+      \endverb
+      \verb{url}
+      \verb https://hackmd.io/@JustMakeIt/HJI5gkpSo
+      \endverb
+    \endentry
+    \entry{taiwansensor_OV2640}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=52e177508349d3e766a72074a5fe52f4}{%
+           family={台灣感測器},
+           familyi={台\bibinitperiod}}}%
+      }
+      \strng{namehash}{52e177508349d3e766a72074a5fe52f4}
+      \strng{fullhash}{52e177508349d3e766a72074a5fe52f4}
+      \strng{bibnamehash}{52e177508349d3e766a72074a5fe52f4}
+      \strng{authorbibnamehash}{52e177508349d3e766a72074a5fe52f4}
+      \strng{authornamehash}{52e177508349d3e766a72074a5fe52f4}
+      \strng{authorfullhash}{52e177508349d3e766a72074a5fe52f4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Arduino 200萬像素 OV2640 影像擷取模組}
+      \verb{urlraw}
+      \verb https://www.taiwansensor.com.tw/product/arduino-200萬像素-ov2640-影像擷取模組-攝像頭模組-支援-jpeg-壓縮輸/
+      \endverb
+      \verb{url}
+      \verb https://www.taiwansensor.com.tw/product/arduino-200%E8%90%AC%E5%83%8F%E7%B4%A0-ov2640-%E5%BD%B1%E5%83%8F%E6%93%B7%E5%8F%96%E6%A8%A1%E7%B5%84-%E6%94%9D%E5%83%8F%E9%A0%AD%E6%A8%A1%E7%B5%84-%E6%94%AF%E6%8F%B4-jpeg-%E5%A3%93%E7%B8%AE%E8%BC%B8/
+      \endverb
+    \endentry
+    \entry{taiwaniot_WemosD1}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b7d34ca364c62ab57ac7dd0d35823ff2}{%
+           family={{台灣物聯科技}},
+           familyi={台\bibinitperiod}}}%
+      }
+      \strng{namehash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \strng{fullhash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \strng{bibnamehash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \strng{authorbibnamehash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \strng{authornamehash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \strng{authorfullhash}{b7d34ca364c62ab57ac7dd0d35823ff2}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{LOLIN (WeMos) D1 WiFi Arduino UNO 開發板}
+      \verb{urlraw}
+      \verb https://www.taiwaniot.com.tw/product/wemos-d1-wifi-arduino-uno-esp8266-開發板/
+      \endverb
+      \verb{url}
+      \verb https://www.taiwaniot.com.tw/product/wemos-d1-wifi-arduino-uno-esp8266-%E9%96%8B%E7%99%BC%E6%9D%BF/
+      \endverb
+    \endentry
+    \entry{ESP32CAM}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=29a84a627935b9dd4af21a986f952ee2}{%
+           family={ICShop},
+           familyi={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{29a84a627935b9dd4af21a986f952ee2}
+      \strng{fullhash}{29a84a627935b9dd4af21a986f952ee2}
+      \strng{bibnamehash}{29a84a627935b9dd4af21a986f952ee2}
+      \strng{authorbibnamehash}{29a84a627935b9dd4af21a986f952ee2}
+      \strng{authornamehash}{29a84a627935b9dd4af21a986f952ee2}
+      \strng{authorfullhash}{29a84a627935b9dd4af21a986f952ee2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{ESP32-CAM - 高效能物聯網相機模組，內建 Wi-Fi 和藍牙功能}
+      \verb{urlraw}
+      \verb https://www.icshop.com.tw/products/368030501448
+      \endverb
+      \verb{url}
+      \verb https://www.icshop.com.tw/products/368030501448
+      \endverb
+    \endentry
+    \entry{lin_2001}{article}{}
+      \name{author}{3}{}{%
+        {{hash=30fa0c19c99c792f1e19c27f2dd4f72a}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Sheng-Fuu},
+           giveni={S\bibinithyphendelim F\bibinitperiod}}}%
+        {{hash=11c3d7bd564d28685c2d9ba85e137c42}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Jaw-Yeh},
+           giveni={J\bibinithyphendelim Y\bibinitperiod}}}%
+        {{hash=2b8dee67d9aeb7b9b17827c4017b0675}{%
+           family={Chao},
+           familyi={C\bibinitperiod},
+           given={Hung-Xin},
+           giveni={H\bibinithyphendelim X\bibinitperiod}}}%
+      }
+      \strng{namehash}{cef1782080df1c5b19d444b89ab78e5b}
+      \strng{fullhash}{cef1782080df1c5b19d444b89ab78e5b}
+      \strng{bibnamehash}{cef1782080df1c5b19d444b89ab78e5b}
+      \strng{authorbibnamehash}{cef1782080df1c5b19d444b89ab78e5b}
+      \strng{authornamehash}{cef1782080df1c5b19d444b89ab78e5b}
+      \strng{authorfullhash}{cef1782080df1c5b19d444b89ab78e5b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE}
+      \field{number}{6}
+      \field{title}{Estimation of number of people in crowded scenes using perspective transformation}
+      \field{volume}{31}
+      \field{year}{2001}
+    \endentry
+    \entry{bertozz1998stereo}{article}{}
+      \name{author}{3}{}{%
+        {{hash=dc5dcd9ad17ede875a75cc6f021da6ba}{%
+           family={Bertozz},
+           familyi={B\bibinitperiod},
+           given={Massimo},
+           giveni={M\bibinitperiod}}}%
+        {{hash=6792e84d0a4896f596671cf5b7aa1459}{%
+           family={Broggi},
+           familyi={B\bibinitperiod},
+           given={Alberto},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f1906591c58afe7c8d1ba2894c0f5aa7}{%
+           family={Fascioli},
+           familyi={F\bibinitperiod},
+           given={Alessandra},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \strng{fullhash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \strng{bibnamehash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \strng{authorbibnamehash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \strng{authornamehash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \strng{authorfullhash}{fe8ec0524a3c80d28c9152323546bdd7}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Image and vision computing}
+      \field{number}{8}
+      \field{title}{Stereo inverse perspective mapping: theory and applications}
+      \field{volume}{16}
+      \field{year}{1998}
+      \field{pages}{585\bibrangedash 590}
+      \range{pages}{6}
+    \endentry
+    \entry{mallot1991inverse}{article}{}
+      \name{author}{4}{}{%
+        {{hash=7df455a385b48cd066f36bd928537439}{%
+           family={Mallot},
+           familyi={M\bibinitperiod},
+           given={Hanspeter\bibnamedelima A},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=b5bfea27864db1c0ed528a3bf391f860}{%
+           family={Bülthoff},
+           familyi={B\bibinitperiod},
+           given={Heinrich\bibnamedelima H},
+           giveni={H\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=16338b21a38c654c79c5bc6d227cb313}{%
+           family={Little},
+           familyi={L\bibinitperiod},
+           given={James\bibnamedelima J},
+           giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=6fa155d4c74fc499116369b70a7ad8bc}{%
+           family={Bohrer},
+           familyi={B\bibinitperiod},
+           given={Stefan},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \strng{fullhash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \strng{bibnamehash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \strng{authorbibnamehash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \strng{authornamehash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \strng{authorfullhash}{689273a61e9aeb7a20dc0dd8b81f529b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biological cybernetics}
+      \field{number}{3}
+      \field{title}{Inverse perspective mapping simplifies optical flow computation and obstacle detection}
+      \field{volume}{64}
+      \field{year}{1991}
+      \field{pages}{177\bibrangedash 185}
+      \range{pages}{9}
+    \endentry
+  \enddatalist
+\endrefsection
 \endinput
 

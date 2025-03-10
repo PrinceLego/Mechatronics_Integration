@@ -1,9 +1,15 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'Proposal.blg'
-[38] biber-darwin:340> INFO - === Tue Feb 25, 2025, 03:55:25
-[47] Biber.pm:419> INFO - Reading 'Proposal.bcf'
-[92] Biber.pm:979> INFO - Found 0 citekeys in bib section 0
-[100] bbl.pm:660> INFO - Writing 'Proposal.bbl' with encoding 'UTF-8'
-[100] bbl.pm:763> INFO - Output to Proposal.bbl
-[100] Biber.pm:131> WARN - The file 'Proposal.bcf' does not contain any citations!
-[100] Biber.pm:133> INFO - WARNINGS: 1
+[39] biber-darwin:340> INFO - === Mon Mar 10, 2025, 18:08:19
+[48] Biber.pm:419> INFO - Reading 'Proposal.bcf'
+[94] Biber.pm:979> INFO - Found 7 citekeys in bib section 0
+[101] Biber.pm:4419> INFO - Processing section 0
+[107] Biber.pm:4610> INFO - Looking for bibtex file 'Proposal.bib' for section 0
+[108] bibtex.pm:1713> INFO - LaTeX decoding ...
+[112] bibtex.pm:1519> INFO - Found BibTeX data source 'Proposal.bib'
+[144] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[144] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[144] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[144] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[151] bbl.pm:660> INFO - Writing 'Proposal.bbl' with encoding 'UTF-8'
+[153] bbl.pm:763> INFO - Output to Proposal.bbl

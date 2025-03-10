@@ -2365,6 +2365,14 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">Proposal.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="6" intorder="1">JustMakeIt_TT_Motor</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">JustMakeIt_TT_Motor</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">taiwansensor_OV2640</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">taiwaniot_WemosD1</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">ESP32CAM</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">lin_2001</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">bertozz1998stereo</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">mallot1991inverse</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
@@ -2376,4 +2384,13 @@
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
+  <bcf:datalist section="0"
+                name="none/global//global/global"
+                type="entry"
+                sortingtemplatename="none"
+                sortingnamekeytemplatename="global"
+                labelprefix=""
+                uniquenametemplatename="global"
+                labelalphanametemplatename="global">
+  </bcf:datalist>
 </bcf:controlfile>
