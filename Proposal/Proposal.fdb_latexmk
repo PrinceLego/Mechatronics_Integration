@@ -1,18 +1,18 @@
 # Fdb version 4
-["biber Proposal"] 1741601296.73102 "Proposal.bcf" "Proposal.bbl" "Proposal" 1741602538.51106 0
-  "Proposal.bcf" 1741602531.1876 107722 eeac2261f718d4253136f55c1ca82c26 "xelatex"
+["biber Proposal"] 1741601296.73102 "Proposal.bcf" "Proposal.bbl" "Proposal" 1742741229.57001 0
+  "Proposal.bcf" 1742741221.97014 107722 eeac2261f718d4253136f55c1ca82c26 "xelatex"
   "Proposal.bib" 1741554642.09014 2298 d170a331fef901dca0009f9b1744c903 ""
   (generated)
   "Proposal.bbl"
   "Proposal.blg"
   (rewritten before read)
-["xdvipdfmx"] 1741602531.26818 "Proposal.xdv" "Proposal.pdf" "Proposal" 1741602538.51283 0
-  "Proposal.xdv" 1741602531.18853 226916 83421cea843fa3378afab4d354e359a3 "xelatex"
+["xdvipdfmx"] 1742741222.05033 "Proposal.xdv" "Proposal.pdf" "Proposal" 1742741229.57193 0
+  "Proposal.xdv" 1742741221.97131 226916 1a97713d372548d8e233e56396e87fa6 "xelatex"
   (generated)
   "Proposal.pdf"
   (rewritten before read)
-["xelatex"] 1741602529.61384 "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" "Proposal.xdv" "Proposal" 1741602538.51112 0
-  "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" 1741602527.69957 34524 8bc63dff475bfff45133ded0b5306e5a ""
+["xelatex"] 1742741220.14198 "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" "Proposal.xdv" "Proposal" 1742741229.57015 0
+  "/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/Proposal/Proposal.tex" 1742741219.72139 34524 978d42583fa2fee1609a41583f9ea7b6 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1136768653 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/lm/ec-lmr12.tfm" 1254269338 12092 7b1546e2d096cfd5dcbd4049b0b1ec2e ""
@@ -202,13 +202,13 @@
   "IMG_5906.jpg" 1741548613.8227 1013742 bac8fadd9c99feae3150cd9cbb19d184 ""
   "IMG_5917.jpg" 1741602215 3352258 3f5df29e1781aea9c17f62b3ef2bc713 ""
   "MxzONoG.png" 1741548367.93463 99248 d5bc25c43ce6b684b89e87f54d174360 ""
-  "Proposal.aux" 1741602531.18571 8898 0901416509f90b5ef2c43ed6995e9bf4 "xelatex"
+  "Proposal.aux" 1742741221.96829 8898 0901416509f90b5ef2c43ed6995e9bf4 "xelatex"
   "Proposal.bbl" 1741601299.35052 9663 782084f4e350f5863865658529db3c94 "biber Proposal"
-  "Proposal.lof" 1741602531.18846 1446 4a675d6ef393f0fb2755b11bd3b9aae8 "xelatex"
-  "Proposal.lot" 1741602531.1885 1217 502f4bb5d81f2ea7a1da20327d7d80a9 "xelatex"
-  "Proposal.run.xml" 1741602531.1883 2463 65bcef20e6b2afd71092a736d0fd6b41 "xelatex"
-  "Proposal.tex" 1741602527.69957 34524 8bc63dff475bfff45133ded0b5306e5a ""
-  "Proposal.toc" 1741602531.18842 1594 9e70a8cd849d59b7612edcde2db69438 "xelatex"
+  "Proposal.lof" 1742741221.97125 1446 4a675d6ef393f0fb2755b11bd3b9aae8 "xelatex"
+  "Proposal.lot" 1742741221.97127 1217 502f4bb5d81f2ea7a1da20327d7d80a9 "xelatex"
+  "Proposal.run.xml" 1742741221.97108 2463 65bcef20e6b2afd71092a736d0fd6b41 "xelatex"
+  "Proposal.tex" 1742741219.72139 34524 978d42583fa2fee1609a41583f9ea7b6 ""
+  "Proposal.toc" 1742741221.97122 1594 9e70a8cd849d59b7612edcde2db69438 "xelatex"
   "frame_with_points_real.jpg" 1728892543.75538 447822 cd000d5bab1f5a3aea2bce007e6205e0 ""
   (generated)
   "Proposal.aux"

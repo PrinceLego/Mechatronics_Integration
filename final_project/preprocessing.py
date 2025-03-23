@@ -1,16 +1,18 @@
 import cv2
 import numpy as np
 import time
-import pyproj
 
-def apply_perspective_transform_and_draw_grid_on_image(image_path, yaw=45, pitch=-45, roll=0, h=0.9, gps_lat=0, gps_lon=0):
+def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.9):
+
+    yaw=0
+    roll=0
     # 读取图像
     frame = cv2.imread(image_path)
     if frame is None:
         print("Error: Could not read image.")
         return
 
-    interval = 200
+    interval = 100
     HFOV = 70.42
     VFOV = 43.3
 
@@ -73,25 +75,9 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path, yaw=45, pitch
 
         return np.array(list(zip(X_w_test, Y_w_test)), dtype=np.float32)
 
-    def calculate_new_position_with_local_offset(lat, lon, yaww, forward_distance, left_distance):
-        # 创建大地测量对象，使用WGS84椭球体
-        geod = pyproj.Geod(ellps='WGS84')
-
-        lon_forward, lat_forward, _ = geod.fwd(lon, lat, yaww, forward_distance)
-        lon_final, lat_final, _ = geod.fwd(lon_forward, lat_forward, (yaww + 90) % 360, left_distance)
-
-        return lat_final, lon_final
-
     def mesh_point_draw(po, resulttt, num=2):
         cv2.circle(resulttt, po, 1, (0, 0, 255), -1)  # 红色网格交点
         world_coord = pixel_to_world(po[0], po[1], K, R, h)
-        cv2.putText(resulttt, str(tuple(round(coord, num) for coord in world_coord)), (po[0] + 5, po[1] - 5),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1, cv2.LINE_AA)  # 黑色文字
-
-    def mesh_point_draw_GPS(po, resulttt, gps_lat, gps_lon, yaw, num=7):
-        cv2.circle(resulttt, po, 1, (0, 0, 255), -1)  # 红色网格交点
-        world_coord = pixel_to_world(po[0], po[1], K, R, h)
-        world_coord = calculate_new_position_with_local_offset(gps_lat, gps_lon, yaw, world_coord[0], world_coord[1])
         cv2.putText(resulttt, str(tuple(round(coord, num) for coord in world_coord)), (po[0] + 5, po[1] - 5),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1, cv2.LINE_AA)  # 黑色文字
 
@@ -125,6 +111,24 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path, yaw=45, pitch
 
     focus_point = (int(width / 2), int(height / 2))
 
+    def world_to_pixel(X_w, Y_w, K, R, h):
+        # 轉換世界座標到相機坐標系
+        X_c = np.array([X_w, Y_w, h])  # 假設物體在地面，高度為 h
+
+        # 計算相機坐標到歪斜相機視角的變換
+        X_n = np.linalg.inv(R) @ X_c
+
+        # 投影到 2D 平面
+        uv1 = K @ X_n
+        u = uv1[0] / uv1[2]  # 正規化 x
+        v = height - (uv1[1] / uv1[2])  # 正規化 y，調整成 OpenCV 影像座標
+
+        return int(u), int(v)  # 返回整數像素座標
+
+
+
+
+
     # 绘制网格线和交点
     for x in range(focus_point[0], width, interval):
         cv2.line(result_mesh, (x, 0), (x, height), (0, 0, 0), 1)  # 垂直线
@@ -143,26 +147,32 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path, yaw=45, pitch
     for x in range(focus_point[0], width, interval):
         for y in range(focus_point[1], height, interval):
             mesh_point_draw((x, y), result_mesh)
-            mesh_point_draw_GPS((x, y), result_gps, gps_lat, gps_lon, yaw)
         for y in range(focus_point[1], 0, -interval):
             mesh_point_draw((x, y), result_mesh)
-            mesh_point_draw_GPS((x, y), result_gps, gps_lat, gps_lon, yaw)
 
     for x in range(focus_point[0], 0, -interval):
         for y in range(focus_point[1], height, interval):
             mesh_point_draw((x, y), result_mesh)
-            mesh_point_draw_GPS((x, y), result_gps, gps_lat, gps_lon, yaw)
         for y in range(focus_point[1], 0, -interval):
             mesh_point_draw((x, y), result_mesh)
-            mesh_point_draw_GPS((x, y), result_gps, gps_lat, gps_lon, yaw)
+
+    u, v = world_to_pixel(0, 0, K, R, h)
+
+    # 在影像上標示該點
+    cv2.circle(result_mesh, (u, v), 5, (0, 255, 0), -1)  # 綠色點
+    cv2.putText(result_mesh, "(0,0)", (u + 10, v - 10), 
+    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+
+
 
     save_frame('a', 'Original Image', frame)
     save_frame('b', 'Perspective Transformed Image', result)
     save_frame('c', 'Perspective Transformed Mesh', result_mesh)
-    save_frame('d', 'Perspective Transformed Mesh & gps', result_gps)
-
+    
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+    return result
+
 # 用法：将路径传入图像文件路径
-apply_perspective_transform_and_draw_grid_on_image("/Users/prince_lego/Desktop/1234.jpg", 0, -10, 0, 1, 25.033964, 121.564468)
+result=apply_perspective_transform_and_draw_grid_on_image("/Users/prince_lego/Desktop/1234.jpg", -15, 2)
