@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 # 隸屬函數尚需依照實際車速調整
 # 影像處理參數需視現場情況調整
 
+# 輸出為車輛前進速度、橫移速度、角速度
 
 def main(images_path):
 
@@ -462,11 +463,12 @@ def main(images_path):
     result=apply_perspective_transform_and_draw_grid_on_image(images_path, -15, 0.1,70.42,43.3)
     processed_image, angle_differences, offset = detect_lane_angle_and_offset(result,[150,300])
     Vx_out,Vy_out,omega_out = calculate_mecanum_wheel_speeds(angle_differences, offset)
-    
+    print(f"Vx: {Vx_out}, Vy: {Vy_out}, Omega: {omega_out}")
+
     """
     print("Angle Differences:", angle_differences)
     print("Offset:", offset)
-    print(f"Vx: {Vx_out}, Vy: {Vy_out}, Omega: {omega_out}")
+    
     
     cv2.imshow("Processed Image", processed_image)
     cv2.waitKey(0)
