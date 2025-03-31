@@ -1,6 +1,6 @@
 import pygame
 
-# 初始化 pygame
+# 初始化
 pygame.init()
 
 # 初始化搖桿
@@ -8,7 +8,7 @@ pygame.joystick.init()
 
 # 檢查是否有搖桿連接
 if pygame.joystick.get_count() == 0:
-    print("未偵測到 PS5 搖桿，請插入 USB 或透過藍牙連線")
+    print("未偵測到 PS5 搖桿")
     exit()
 
 # 取得搖桿
@@ -50,23 +50,22 @@ AXIS_NAMES = {
 
 # 儲存每個按鈕的狀態為變數
 def update_button_and_axis_states(button_states, axis_states):
-    # 按鈕狀態
+
     button_state_variables = {}
     for i, name in BUTTON_NAMES.items():
         button_state_variables[name] = button_states.get(name, 0)
 
-    # 搖桿狀態
     axis_state_variables = {}
     for i, name in AXIS_NAMES.items():
         axis_state_variables[name] = round(axis_states.get(name, 0), 2)
 
     return button_state_variables, axis_state_variables
 
-# 清除畫面函數
+# 清除畫面
 def clear_screen():
     print("\033[H\033[J", end="")
 
-# 顯示按鈕狀態函數
+# 顯示按鈕狀態
 def print_button_states(button_states):
     print("**按鍵狀態**:")
     pressed_buttons = [name for name, state in button_states.items() if state]
@@ -76,22 +75,20 @@ def print_button_states(button_states):
     else:
         print("沒有按鍵被按下")
 
-# 顯示搖桿狀態函數
+# 顯示搖桿狀態
 def print_axis_states(axis_states):
     print("\n**搖桿狀態**:")
     for name, value in axis_states.items():
         print(f"  {name}: {value}")
 
-# 主程式迴圈
 running = True
 while running:
-    pygame.event.pump()  # 更新事件
+    pygame.event.pump() 
 
     # 讀取所有按鍵和搖桿軸
     button_states = {BUTTON_NAMES[i]: joystick.get_button(i) for i in range(joystick.get_numbuttons())}
     axis_states = {AXIS_NAMES[i]: round(joystick.get_axis(i), 2) for i in range(joystick.get_numaxes())}
 
-    # 清除畫面
     clear_screen()
 
     # 輸出 PS5 搖桿狀態
@@ -110,7 +107,6 @@ while running:
         axis_state_variables["Left_X"], axis_state_variables["Left_Y"], axis_state_variables["Right_X"], axis_state_variables["Right_Y"], \
         axis_state_variables["L2_Trigger"], axis_state_variables["R2_Trigger"]
 
-    # 輸出按鍵和搖桿狀態
     print_button_states(button_states)
     print_axis_states(axis_states)
     print()
@@ -121,17 +117,15 @@ while running:
     print(f"L2: {L2_Trigger}, R2: {R2_Trigger}")
 
 
-    if Cross == 1:  # 如果 "叉叉" 按鍵被按下
+    if Cross == 1:  
         print("'叉叉' 按鍵被按下！")
 
     if Left_X > 0.3: 
         print("!!!!!!!!!")
 
 
-
-
     pygame.time.wait(100)
-    # 退出條件
-    if Share == 1:  # 如果 "Share" 按鈕被按下
+
+    if Share == 1:  
         print("檢測到 'Share' 按鍵被按下，程式即將退出...")
         running = False

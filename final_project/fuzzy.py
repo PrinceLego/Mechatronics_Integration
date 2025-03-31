@@ -4,16 +4,21 @@ from skfuzzy import control as ctrl
 import matplotlib.pyplot as plt
 
 def calculate_mecanum_wheel_speeds(angle_input, position_input):
-    # 1. 定義輸入變數
+    #定義輸入變數
     angle = ctrl.Antecedent(np.arange(-30, 31, 1), 'angle')  # 角度偏差 (-30° ~ 30°)
     position = ctrl.Antecedent(np.arange(-10, 11, 1), 'position')  # 位置偏移 (-10 ~ 10)
 
-    # 2. 定義輸出變數
+    #定義輸出變數
     Vx = ctrl.Consequent(np.arange(0, 101, 1), 'Vx')
     Vy = ctrl.Consequent(np.arange(-50, 50, 1), 'Vy')
     omega = ctrl.Consequent(np.arange(-50, 51, 1), 'omega')
 
-    # 3. 定義隸屬函數
+    #定義隸屬函數
+    Vx = ctrl.Consequent(np.arange(0, 10, 0.1), 'Vx')
+    Vy = ctrl.Consequent(np.arange(-10, 10, 0.1), 'Vy')
+    omega = ctrl.Consequent(np.arange(-3, 3, 0.1), 'omega')
+
+    #定義隸屬函數
     angle['BL'] = fuzz.trimf(angle.universe, [-30, -30, -15])
     angle['SL'] = fuzz.trimf(angle.universe, [-20, -10, 0])
     angle['Z'] = fuzz.trimf(angle.universe, [-5, 0, 5])
@@ -26,25 +31,24 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     position['SR'] = fuzz.trimf(position.universe, [0, 3, 7])
     position['BR'] = fuzz.trimf(position.universe, [5, 10, 10])
 
-    Vx['S'] = fuzz.trimf(Vx.universe, [0, 25, 50])  # 慢速
-    Vx['M'] = fuzz.trimf(Vx.universe, [25, 50, 75])    # 中速
-    Vx['F'] = fuzz.trimf(Vx.universe, [50, 75, 100])    # 快速
+    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 2.5, 5])          #慢速
+    Vx['M'] = fuzz.trimf(Vx.universe, [2.5, 5, 7.5])                 #中速
+    Vx['F'] = fuzz.trapmf(Vx.universe, [5, 7.5, 10, 10])             #快速
+
+    Vy['LL'] = fuzz.trapmf(Vy.universe, [-10, -10, -7,-4])             #最左
+    Vy['L'] = fuzz.trimf(Vy.universe, [-6, -3, 0])              #左
+    Vy['Z'] = fuzz.trimf(Vy.universe, [-4, 0, 4])                 #中間
+    Vy['R'] = fuzz.trimf(Vy.universe, [0, 3, 6])                 #右
+    Vy['RR'] = fuzz.trapmf(Vy.universe, [4, 7, 10,10])                #最右
 
 
-    Vy['LL'] = fuzz.trimf(Vy.universe, [-50, -50, -25])  # 最左
-    Vy['L'] = fuzz.trimf(Vy.universe, [-40, -25, -10])   # 左
-    Vy['Z'] = fuzz.trimf(Vy.universe, [-15, 0, 15])      # 中間
-    Vy['R'] = fuzz.trimf(Vy.universe, [10, 25, 40])      # 右
-    Vy['RR'] = fuzz.trimf(Vy.universe, [25, 50, 50])     # 最右
+    omega['CCW2'] = fuzz.trapmf(omega.universe, [-3, -3, -2,-1])     #強烈逆時針
+    omega['CCW'] = fuzz.trimf(omega.universe, [-2, -1, 0])      #輕微逆時針
+    omega['Z'] = fuzz.trimf(omega.universe, [-1, 0, 1])           #中間
+    omega['CW'] = fuzz.trimf(omega.universe, [0, 1, 2])          #輕微順時針
+    omega['CW2'] = fuzz.trapmf(omega.universe, [1, 2, 3, 3])         #強烈順時
 
-
-    omega['CCW2'] = fuzz.trimf(omega.universe, [-50, -50, -35])  # 強烈逆時針
-    omega['CCW'] = fuzz.trimf(omega.universe, [-40, -25, -10])   # 輕微逆時針
-    omega['Z'] = fuzz.trimf(omega.universe, [-15, 0, 15])        # 中間
-    omega['CW'] = fuzz.trimf(omega.universe, [10, 25, 40])       # 輕微順時針
-    omega['CW2'] = fuzz.trimf(omega.universe, [35, 50, 50])      # 強烈順時針
-
-    # 5. 定義位置控制規則
+    #定義位置控制規則
     rules = [
         ctrl.Rule((angle['BL'] & position['BL']), (Vx['S'], Vy['RR'], omega['CW2'])),
         ctrl.Rule((angle['SL'] & position['BL']), (Vx['S'], Vy['RR'], omega['CW'])),
@@ -78,20 +82,20 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     ]
 
 
- # 5. 建立模糊控制系統
+    #建立模糊控制系統
     control_system = ctrl.ControlSystem(rules)
     simulator = ctrl.ControlSystemSimulation(control_system)
     
-    # 6. 設定輸入並計算
+    # 設定輸入並計算
     simulator.input['angle'] = angle_input
     simulator.input['position'] = position_input
     simulator.compute()
 
-    # 8. 加權合併輸出
+    #加權合併輸出
     Vx_out = simulator.output['Vx']
     Vy_out = simulator.output['Vy']
     omega_out = simulator.output['omega']
-    # 9. 計算麥克納姆輪速度
+    #計算麥克納姆輪速度
     V_FL = Vx_out - Vy_out - omega_out
     V_FR = Vx_out + Vy_out + omega_out
     V_RL = Vx_out + Vy_out - omega_out
@@ -100,7 +104,7 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     print(f"Vx: {Vx_out}, Vy: {Vy_out}, Omega: {omega_out}")
     
     #"""
-    # 畫出角度的隸屬函數
+    #角度的隸屬函數
     plt.figure()
     plt.plot(angle.universe, angle['BL'].mf, label='BL')
     plt.plot(angle.universe, angle['SL'].mf, label='SL')
@@ -111,7 +115,7 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     plt.legend()
     plt.show()
 
-    # 畫出位置的隸屬函數
+    #位置的隸屬函數
     plt.figure()
     plt.plot(position.universe, position['BL'].mf, label='BL')
     plt.plot(position.universe, position['SL'].mf, label='SL')
@@ -122,7 +126,7 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     plt.legend()
     plt.show()
 
-    # 畫出 Vx 的隸屬函數
+    #Vx 的隸屬函數
     plt.figure()
     plt.plot(Vx.universe, Vx['S'].mf, label='S')
     plt.plot(Vx.universe, Vx['M'].mf, label='M')
@@ -131,20 +135,24 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     plt.legend()
     plt.show()
 
-    # 畫出 Vy 的隸屬函數
+    #Vy 的隸屬函數
     plt.figure()
+    plt.plot(Vy.universe, Vy['LL'].mf, label='LL')
     plt.plot(Vy.universe, Vy['L'].mf, label='L')
     plt.plot(Vy.universe, Vy['Z'].mf, label='Z')
     plt.plot(Vy.universe, Vy['R'].mf, label='R')
+    plt.plot(Vy.universe, Vy['RR'].mf, label='RR')
     plt.title('Vy Membership Functions')
     plt.legend()
     plt.show()
 
-    # 畫出 Omega 的隸屬函數
+    #Omega 的隸屬函數
     plt.figure()
+    plt.plot(omega.universe, omega['CCW2'].mf, label='CCW2')
     plt.plot(omega.universe, omega['CCW'].mf, label='CCW')
     plt.plot(omega.universe, omega['Z'].mf, label='Z')
     plt.plot(omega.universe, omega['CW'].mf, label='CW')
+    plt.plot(omega.universe, omega['CW2'].mf, label='CW2')
     plt.title('Omega Membership Functions')
     plt.legend()
     plt.show()
