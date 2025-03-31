@@ -76,7 +76,6 @@ def detect_lane_angle_and_offset(image, y_heights):
         
     return image, angle_differences, offset
 
-# 呼叫函式
 image = cv2.imread("/Users/prince_lego/Desktop/1234.jpg")
 
 calculate_position = [50, 100, 150]
