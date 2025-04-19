@@ -535,6 +535,7 @@ async def send_motor_commands():
         mode2 = False
         mode3 = False
         mode4 = False
+        mode0 = True
         choose_mode = False
         while running:
 
@@ -553,7 +554,15 @@ async def send_motor_commands():
             Left= button_states.get("Left", 0)
             Right= button_states.get("Right", 0)
 
-            if Cross == 1 and not choose_mode and not mode1 and not mode2 and not mode3 and not mode4:
+            if  mode0 == True and not choose_mode:
+                data = [0,0,0 ,0,0,0 ,0,0,0 ,0,0,0]
+                packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
+                await client.write_gatt_char(characteristic_uuid, packed_data)
+                print(f"發送: {list(data)}")
+                await asyncio.sleep(0.2)
+
+
+            if  Cross == 1 and not choose_mode and not mode1 and not mode2 and not mode3 and not mode4 and mode0:
                 print("檢測到Cross 請選擇模式")
                 print()
                 print("上：搖桿控制模式")
@@ -562,8 +571,9 @@ async def send_motor_commands():
                 print("下：模式四(無功能)")
                 print()
                 choose_mode=True
+                
 
-            if  mode1==True:
+            if  mode1 == True:
                 # 計算速度
                 ss, direction, vx, vy, omega = get_speed(R2_Trigger, Right_X, Right_Y, 0, 10, Left_X, 3)
                 Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega,turning_radius,wheel_radius)
@@ -573,7 +583,7 @@ async def send_motor_commands():
                 print(f"發送: {list(data)}")
                 await asyncio.sleep(0.2)
 
-            if  mode2==True:
+            if  mode2 == True:
 
                 frame = get_frame()
                 if frame is not None:
@@ -589,36 +599,41 @@ async def send_motor_commands():
 
                 await asyncio.sleep(0.2)
 
-            if  mode3==True:
+            if  mode3 == True:
                 await rssi_return()
                 await asyncio.sleep(0.2)
 
-            if  mode4==True:
+            if  mode4 == True:
                 print("模式四")
                 await asyncio.sleep(0.2)
 
             if Up == 1 and choose_mode :
                 print("切換到搖桿控制模式")
-                mode1=True
-                choose_mode=False
+                mode1 = True
+                mode0 = False
+                choose_mode = False
 
             if Left == 1 and choose_mode :
                 print("切換影像循線模式")
-                mode2=True
-                choose_mode=False
+                mode2 = True
+                mode0 == False
+                choose_mode = False
 
             if Right == 1 and choose_mode :
                 print("切換到模式三")
-                mode3=True
-                choose_mode=False
+                mode3 = True
+                mode0 = False
+                choose_mode = False
 
             if Down == 1 and choose_mode :
                 print("切換到模式四")
-                mode4=True
-                choose_mode=False
+                mode4 = True
+                mode0 = False
+                choose_mode = False
 
             if Circle == 1:
                 print("檢測到 Circle 按鍵被按下，退出模式")
+                mode0 = True
                 mode1 = False
                 mode2 = False
                 mode3 = False
