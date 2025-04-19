@@ -24,32 +24,32 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
 
     # 定義模糊輸入變數
     angle = ctrl.Antecedent(np.arange(-30, 30.1, 0.1), 'angle')
-    position = ctrl.Antecedent(np.arange(-10, 10.1, 0.1), 'position')
+    position = ctrl.Antecedent(np.arange(-50, 50, 0.1), 'position')
 
     # 定義輸出變數
-    Vx = ctrl.Consequent(np.arange(0, 10, 0.1), 'Vx')
-    Vy = ctrl.Consequent(np.arange(-10, 10, 0.1), 'Vy')
-    omega = ctrl.Consequent(np.arange(-3, 3, 0.1), 'omega')
+    Vx = ctrl.Consequent(np.arange(0, 200, 0.1), 'Vx')
+    Vy = ctrl.Consequent(np.arange(-50, 50, 0.1), 'Vy')
+    omega = ctrl.Consequent(np.arange(-20, 20, 0.1), 'omega')
 
     # 隸屬函數定義
     angle.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
     position.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
 
-    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 2.5, 5])
-    Vx['M'] = fuzz.trimf(Vx.universe, [2.5, 5, 7.5])
-    Vx['F'] = fuzz.trapmf(Vx.universe, [5, 7.5, 10, 10])
+    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 50, 100])
+    Vx['M'] = fuzz.trimf(Vx.universe, [50, 100, 150])
+    Vx['F'] = fuzz.trapmf(Vx.universe, [100, 150, 200, 200])
 
-    Vy['LL'] = fuzz.trapmf(Vy.universe, [-10, -10, -7, -4])
-    Vy['L'] = fuzz.trimf(Vy.universe, [-6, -3, 0])
-    Vy['Z'] = fuzz.trimf(Vy.universe, [-4, 0, 4])
-    Vy['R'] = fuzz.trimf(Vy.universe, [0, 3, 6])
-    Vy['RR'] = fuzz.trapmf(Vy.universe, [4, 7, 10, 10])
+    Vy['LL'] = fuzz.trapmf(Vy.universe, [-50, -50, -40, -20])
+    Vy['L'] = fuzz.trimf(Vy.universe, [-30, -15, 0])
+    Vy['Z'] = fuzz.trimf(Vy.universe, [-15, 0, 15])
+    Vy['R'] = fuzz.trimf(Vy.universe, [0, 15, 30])
+    Vy['RR'] = fuzz.trapmf(Vy.universe, [20, 40, 50, 50])
 
-    omega['CCW2'] = fuzz.trapmf(omega.universe, [-3, -3, -2, -1])
-    omega['CCW'] = fuzz.trimf(omega.universe, [-2, -1, 0])
-    omega['Z'] = fuzz.trimf(omega.universe, [-1, 0, 1])
-    omega['CW'] = fuzz.trimf(omega.universe, [0, 1, 2])
-    omega['CW2'] = fuzz.trapmf(omega.universe, [1, 2, 3, 3])
+    omega['CCW2'] = fuzz.trapmf(omega.universe, [-20, -20, -15, -10])
+    omega['CCW'] = fuzz.trimf(omega.universe, [-15, -10, 0])
+    omega['Z'] = fuzz.trimf(omega.universe, [-10, 0, 10])
+    omega['CW'] = fuzz.trimf(omega.universe, [0, 10, 15])
+    omega['CW2'] = fuzz.trapmf(omega.universe, [10, 15, 20, 20])
 
     # 規則定義（你已有的可維持不變）
     rules = [
@@ -109,7 +109,6 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     omega_out = np.mean(sorted(omega_results)[-cutoff:]) if omega_results else 0
 
 
-
     #"""
     #角度的隸屬函數
     plt.figure()
@@ -119,7 +118,10 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.plot(angle.universe, angle['SR'].mf, label='SR')
     plt.plot(angle.universe, angle['BR'].mf, label='BR')
     plt.title('Angle Membership Functions')
-    plt.legend()
+    plt.xlabel('Angle Offset (deg)')                           
+    plt.ylabel('Membership Degree')                                                            
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()                                      
     plt.show()
 
     #位置的隸屬函數
@@ -129,8 +131,11 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.plot(position.universe, position['Z'].mf, label='Z')
     plt.plot(position.universe, position['SR'].mf, label='SR')
     plt.plot(position.universe, position['BR'].mf, label='BR')
-    plt.title('Position Membership Functions')
-    plt.legend()
+    plt.title('Distance Membership Functions')
+    plt.xlabel('Distance Offset (mm)')                           
+    plt.ylabel('Membership Degree')                                                            
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()                                      
     plt.show()
 
     #Vx 的隸屬函數
@@ -139,7 +144,10 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.plot(Vx.universe, Vx['M'].mf, label='M')
     plt.plot(Vx.universe, Vx['F'].mf, label='F')
     plt.title('Vx Membership Functions')
-    plt.legend()
+    plt.xlabel('Vx (mm/s)')                           
+    plt.ylabel('Membership Degree')                                                            
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()                                      
     plt.show()
 
     #Vy 的隸屬函數
@@ -150,7 +158,10 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.plot(Vy.universe, Vy['R'].mf, label='R')
     plt.plot(Vy.universe, Vy['RR'].mf, label='RR')
     plt.title('Vy Membership Functions')
-    plt.legend()
+    plt.xlabel('Vy (mm/s)')                           
+    plt.ylabel('Membership Degree')                                                            
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()                                      
     plt.show()
 
     #Omega 的隸屬函數
@@ -161,7 +172,10 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.plot(omega.universe, omega['CW'].mf, label='CW')
     plt.plot(omega.universe, omega['CW2'].mf, label='CW2')
     plt.title('Omega Membership Functions')
-    plt.legend()
+    plt.xlabel('Omega (deg/s)')                           
+    plt.ylabel('Membership Degree')                                                            
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()                                      
     plt.show()
     #"""
 
@@ -176,8 +190,8 @@ output = calculate_mecanum_wheel_speeds(angles, positions)
 print(f"Vx: {output['Vx']:.2f}, Vy: {output['Vy']:.2f}, Omega: {output['omega']:.2f}")
 
 #"""
-angle_range = np.linspace(-30, 30, 5)
-position_range = np.linspace(-10, 10, 5)
+angle_range = np.linspace(-30, 30, 50)
+position_range = np.linspace(-50, 50, 50)
 
 # 建立網格
 angle_grid, position_grid = np.meshgrid(angle_range, position_range)
@@ -203,41 +217,85 @@ for i in range(angle_grid.shape[0]):
 
 # 顯示 Vx 的顏色圖
 plt.figure(figsize=(8, 6))
-plt.imshow(Vx_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis')
+plt.imshow(Vx_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
 plt.title('Vx Output')
-plt.xlabel('Angle (°)')
-plt.ylabel('Position Offset')
-plt.colorbar(label='Vx')
+plt.xlabel('Angle (deg)')
+plt.ylabel('Distance Offset (mm)')
+plt.colorbar(label='Vx (mm/s)')
+plt.tight_layout()
 plt.show()
 
 # 顯示 Vy 的顏色圖
 plt.figure(figsize=(8, 6))
-plt.imshow(Vy_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis')
+plt.imshow(Vy_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
 plt.title('Vy Output')
-plt.xlabel('Angle (°)')
-plt.ylabel('Position Offset')
-plt.colorbar(label='Vy')
+plt.xlabel('Angle (deg)')
+plt.ylabel('Distance Offset (mm)')
+plt.colorbar(label='Vy (mm/s)')
 plt.show()
 
 # 顯示 omega 的顏色圖
 plt.figure(figsize=(8, 6))
-plt.imshow(omega_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis')
+plt.imshow(omega_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
 plt.title('Omega Output')
-plt.xlabel('Angle (°)')
-plt.ylabel('Position Offset')
-plt.colorbar(label='Omega')
+plt.xlabel('Angle (deg)')
+plt.ylabel('Distance Offset (mm)')
+plt.colorbar(label='Omega (deg/s)')
 plt.show()
 
-V_sum_grid = Vx_grid + Vy_grid+omega_grid
+
+
+
+
+
+
+def mecanum_v(vx, vy, omega,R,r):
+    omega=np.pi*omega/180
+    return (vx - vy - omega*R)/r, (vx + vy + omega*R)/r, (vx + vy - omega*R)/r, (vx - vy + omega*R)/r
+
+FL_grid,FR_grid,RL_grid,RR_grid=mecanum_v(Vx_grid, Vy_grid,omega_grid,60,55)
+
 
 plt.figure(figsize=(8, 6))
-plt.imshow(V_sum_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis')
-plt.colorbar(label='Vx + Vy')
-plt.title('Sum of Vx and Vy')
-plt.xlabel('Position Offset')
-plt.ylabel('Angle (°)')
+plt.imshow(FL_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
+plt.colorbar(label='FL(rad/s)')
+plt.title('Distance offset and angle corresponding to FL')
+plt.ylabel('Distance Offset (mm)')
+plt.xlabel('Angle (deg)')
 plt.tight_layout()
 plt.show()
+
+plt.figure(figsize=(8, 6))
+plt.imshow(FR_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
+plt.colorbar(label='FR(rad/s)')
+plt.title('Distance offset and angle corresponding to FR')
+plt.ylabel('Distance Offset (mm)')
+plt.xlabel('Angle (deg)')
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(8, 6))
+plt.imshow(RL_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
+plt.colorbar(label='FL(rad/s)')
+plt.title('Distance offset and angle corresponding to RL')
+plt.ylabel('Distance Offset (mm)')
+plt.xlabel('Angle (deg)')
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(8, 6))
+plt.imshow(RR_grid, extent=[angle_range.min(), angle_range.max(), position_range.min(), position_range.max()], origin='lower', cmap='viridis',aspect='auto')
+plt.colorbar(label='RR(rad/s)')
+plt.title('Distance offset and angle corresponding to RR')
+plt.ylabel('Distance Offset (mm)')
+plt.xlabel('Angle (deg)')
+plt.tight_layout()
+plt.show()
+
+
+
+
+
 
 # 畫出 Vx、Vy 和 omega 的 3D 圖
 fig = plt.figure(figsize=(18, 7))
@@ -245,51 +303,86 @@ fig = plt.figure(figsize=(18, 7))
 # Vx 圖
 ax1 = fig.add_subplot(131, projection='3d')
 surf_vx = ax1.plot_surface(angle_grid, position_grid, Vx_grid, cmap='viridis')
-ax1.set_title('Vx Output Surface')
-ax1.set_xlabel('Angle (°)')
-ax1.set_ylabel('Position Offset')
+ax1.set_title('Distance offset and angle corresponding to Vx Output')
+ax1.set_xlabel('Angle (deg)')
+ax1.set_ylabel('Distance Offset (mm)')
 ax1.set_zlabel('Vx (Forward Speed)')
 fig.colorbar(surf_vx, shrink=0.5, aspect=10)
 
 # Vy 圖
 ax2 = fig.add_subplot(132, projection='3d')
 surf_vy = ax2.plot_surface(angle_grid, position_grid, Vy_grid, cmap='viridis')
-ax2.set_title('Vy Output Surface')
-ax2.set_xlabel('Angle (°)')
-ax2.set_ylabel('Position Offset')
+ax2.set_title('Distance offset and angle corresponding to Vy Output')
+ax2.set_xlabel('Angle (deg)')
+ax2.set_ylabel('Distance Offset (mm)')
 ax2.set_zlabel('Vy (Sideways Speed)')
 fig.colorbar(surf_vy, shrink=0.5, aspect=10)
 
 # omega 圖
 ax3 = fig.add_subplot(133, projection='3d')
 surf_omega = ax3.plot_surface(angle_grid, position_grid, omega_grid, cmap='viridis')
-ax3.set_title('Omega Output Surface')
-ax3.set_xlabel('Angle (°)')
-ax3.set_ylabel('Position Offset')
+ax3.set_title('Distance offset and angle corresponding to Omega Output')
+ax3.set_xlabel('Angle (deg)')
+ax3.set_ylabel('Distance Offset (mm)')
 ax3.set_zlabel('Omega (Angular Speed)')
 fig.colorbar(surf_omega, shrink=0.5, aspect=10)
 
-# 顯示圖表
 plt.tight_layout()
 plt.show()
 
 
-# 畫出 3D 圖
+
+
 fig = plt.figure(figsize=(12, 7))
 ax = fig.add_subplot(111, projection='3d')
-
-# 使用 plot_surface 畫出 3D 表面
-surf = ax.plot_surface(angle_grid, position_grid, V_sum_grid, cmap='viridis')
-
-# 設定標題和軸標籤
-ax.set_title('Sum of Vx and Vy (3D Surface)')
-ax.set_xlabel('Angle (°)')
-ax.set_ylabel('Position Offset')
-ax.set_zlabel('Vx + Vy')
-
+surf = ax.plot_surface(angle_grid, position_grid, FL_grid, cmap='viridis')
+ax.set_title('Distance offset and angle corresponding to FL')
+ax.set_xlabel('Angle (deg)')
+ax.set_ylabel('Distance Offset (mm)')
+ax.set_zlabel('FL(rad/s)')
 # 加入 colorbar 來顯示顏色對應的數值
 fig.colorbar(surf, shrink=0.5, aspect=10)
+# 顯示圖
+plt.tight_layout()
+plt.show()
 
+fig = plt.figure(figsize=(12, 7))
+ax = fig.add_subplot(111, projection='3d')
+surf = ax.plot_surface(angle_grid, position_grid, FR_grid, cmap='viridis')
+ax.set_title('Distance offset and angle corresponding to FR')
+ax.set_xlabel('Angle (deg)')
+ax.set_ylabel('Distance Offset (mm)')
+ax.set_zlabel('FR(rad/s)')
+# 加入 colorbar 來顯示顏色對應的數值
+fig.colorbar(surf, shrink=0.5, aspect=10)
+# 顯示圖
+plt.tight_layout()
+plt.show()
+
+
+fig = plt.figure(figsize=(12, 7))
+ax = fig.add_subplot(111, projection='3d')
+surf = ax.plot_surface(angle_grid, position_grid, RR_grid, cmap='viridis')
+ax.set_title('Distance offset and angle corresponding to RR')
+ax.set_xlabel('Angle (deg)')
+ax.set_ylabel('Distance Offset (mm)')
+ax.set_zlabel('RR(rad/s)')
+# 加入 colorbar 來顯示顏色對應的數值
+fig.colorbar(surf, shrink=0.5, aspect=10)
+# 顯示圖
+plt.tight_layout()
+plt.show()
+
+
+fig = plt.figure(figsize=(12, 7))
+ax = fig.add_subplot(111, projection='3d')
+surf = ax.plot_surface(angle_grid, position_grid, RL_grid, cmap='viridis')
+ax.set_title('Distance offset and angle corresponding to RL')
+ax.set_xlabel('Angle (deg)')
+ax.set_ylabel('Distance Offset (mm)')
+ax.set_zlabel('RL(rad/s)')
+# 加入 colorbar 來顯示顏色對應的數值
+fig.colorbar(surf, shrink=0.5, aspect=10)
 # 顯示圖
 plt.tight_layout()
 plt.show()

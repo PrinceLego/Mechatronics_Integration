@@ -25,6 +25,8 @@ last_detected_time = {addr: None for addr in target_devices}  # 記錄每個設�
 RSSI_TIMEOUT = 3.0  # 若超過此秒數未更新 RSSI，則視為 None
 
 
+turning_radius=60
+wheel_radius=55
 # 初始化
 pygame.init()
 pygame.joystick.init()
@@ -104,8 +106,9 @@ def get_speed(v, x, y, vmin, vmax, o, omax):
         speed, vx, vy, angle = 0, 0, 0, 0
     return speed, angle, vx, vy, omega
 
-def mecanum_v(vx, vy, omega):
-    return vx - vy - omega, vx + vy + omega, vx + vy - omega, vx - vy + omega
+def mecanum_v(vx, vy, omega,R,r):
+    omega=np.deg2rad(omega)
+    return (vx - vy - omega*R)/r, (vx + vy + omega*R)/r, (vx + vy - omega*R)/r, (vx - vy + omega*R)/r
 
 def l298n(Vfl, Vfr, Vrl, Vrr):
     def to_bytes(value):
@@ -392,43 +395,34 @@ def calculate_mecanum_wheel_speeds(angle_input, position_input):
     """
         
     #定義輸入變數
-    angle = ctrl.Antecedent(np.arange(-30, 30, 0.1), 'angle')         # 角度偏差 (-30° ~ 30°)
-    position = ctrl.Antecedent(np.arange(-10, 10, 0.1), 'position')   # 位置偏移 (-10 ~ 10)
+    angle = ctrl.Antecedent(np.arange(-30, 30.1, 0.1), 'angle')
+    position = ctrl.Antecedent(np.arange(-50, 50, 0.1), 'position')
 
-    #定義輸出變數
-    Vx = ctrl.Consequent(np.arange(0, 10, 0.1), 'Vx')
-    Vy = ctrl.Consequent(np.arange(-10, 10, 0.1), 'Vy')
-    omega = ctrl.Consequent(np.arange(-3, 3, 0.1), 'omega')
+    # 定義輸出變數
+    Vx = ctrl.Consequent(np.arange(0, 200, 0.1), 'Vx')
+    Vy = ctrl.Consequent(np.arange(-50, 50, 0.1), 'Vy')
+    omega = ctrl.Consequent(np.arange(-20, 20, 0.1), 'omega')
 
-    #定義隸屬函數
-    angle['BL'] = fuzz.trimf(angle.universe, [-30, -30, -15])
-    angle['SL'] = fuzz.trimf(angle.universe, [-20, -10, 0])
-    angle['Z'] = fuzz.trimf(angle.universe, [-5, 0, 5])
-    angle['SR'] = fuzz.trimf(angle.universe, [0, 10, 20])
-    angle['BR'] = fuzz.trimf(angle.universe, [15, 30, 30])
+    # 隸屬函數定義
+    angle.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
+    position.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
 
-    position['BL'] = fuzz.trimf(position.universe, [-10, -10, -5])
-    position['SL'] = fuzz.trimf(position.universe, [-7, -3, 0])
-    position['Z'] = fuzz.trimf(position.universe, [-3, 0, 3])
-    position['SR'] = fuzz.trimf(position.universe, [0, 3, 7])
-    position['BR'] = fuzz.trimf(position.universe, [5, 10, 10])
+    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 50, 100])
+    Vx['M'] = fuzz.trimf(Vx.universe, [50, 100, 150])
+    Vx['F'] = fuzz.trapmf(Vx.universe, [100, 150, 200, 200])
 
-    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 2.5, 5])          #慢速
-    Vx['M'] = fuzz.trimf(Vx.universe, [2.5, 5, 7.5])                 #中速
-    Vx['F'] = fuzz.trapmf(Vx.universe, [5, 7.5, 10, 10])             #快速
+    Vy['LL'] = fuzz.trapmf(Vy.universe, [-50, -50, -40, -20])
+    Vy['L'] = fuzz.trimf(Vy.universe, [-30, -15, 0])
+    Vy['Z'] = fuzz.trimf(Vy.universe, [-15, 0, 15])
+    Vy['R'] = fuzz.trimf(Vy.universe, [0, 15, 30])
+    Vy['RR'] = fuzz.trapmf(Vy.universe, [20, 40, 50, 50])
 
-    Vy['LL'] = fuzz.trapmf(Vy.universe, [-10, -10, -7,-4])             #最左
-    Vy['L'] = fuzz.trimf(Vy.universe, [-6, -3, 0])              #左
-    Vy['Z'] = fuzz.trimf(Vy.universe, [-4, 0, 4])                 #中間
-    Vy['R'] = fuzz.trimf(Vy.universe, [0, 3, 6])                 #右
-    Vy['RR'] = fuzz.trapmf(Vy.universe, [4, 7, 10,10])                #最右
+    omega['CCW2'] = fuzz.trapmf(omega.universe, [-20, -20, -15, -10])
+    omega['CCW'] = fuzz.trimf(omega.universe, [-15, -10, 0])
+    omega['Z'] = fuzz.trimf(omega.universe, [-10, 0, 10])
+    omega['CW'] = fuzz.trimf(omega.universe, [0, 10, 15])
+    omega['CW2'] = fuzz.trapmf(omega.universe, [10, 15, 20, 20])
 
-
-    omega['CCW2'] = fuzz.trapmf(omega.universe, [-3, -3, -2,-1])     #強烈逆時針
-    omega['CCW'] = fuzz.trimf(omega.universe, [-2, -1, 0])      #輕微逆時針
-    omega['Z'] = fuzz.trimf(omega.universe, [-1, 0, 1])           #中間
-    omega['CW'] = fuzz.trimf(omega.universe, [0, 1, 2])          #輕微順時針
-    omega['CW2'] = fuzz.trapmf(omega.universe, [1, 2, 3, 3])         #強烈順時
 
     #定義位置控制規則
     rules = [
@@ -572,11 +566,11 @@ async def send_motor_commands():
             if  mode1==True:
                 # 計算速度
                 ss, direction, vx, vy, omega = get_speed(R2_Trigger, Right_X, Right_Y, 0, 10, Left_X, 3)
-                Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega)
+                Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega,turning_radius,wheel_radius)
                 data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
                 packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
                 await client.write_gatt_char(characteristic_uuid, packed_data)
-                print(f"發送數據: {list(data)}")
+                print(f"發送: {list(data)}")
                 await asyncio.sleep(0.2)
 
             if  mode2==True:
@@ -587,11 +581,11 @@ async def send_motor_commands():
                     processed_image, angle_differences, offset = detect_lane_angle_and_offset(result,[150,300])
                     Vx_out,Vy_out,omega_out = calculate_mecanum_wheel_speeds(angle_differences, offset)
                     cv2.imshow("ESP32-CAM Stream", frame)
-                    Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out)
+                    Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega,turning_radius,wheel_radius)
                     data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
                     packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
                     await client.write_gatt_char(characteristic_uuid, packed_data)
-                    print(f"發送數據: {list(data)}")
+                    print(f"發送: {list(data)}")
 
                 await asyncio.sleep(0.2)
 
