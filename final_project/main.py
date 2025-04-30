@@ -15,18 +15,18 @@ from bleak import BleakScanner
 # BLE 設定
 device_address = "6BBBBE46-E627-92F7-7299-8DE80626783E"  # 設備 UUID
 characteristic_uuid = "0000ffe1-0000-1000-8000-00805f9b34fb"  # 特徵 UUID
-ESP32_URL = "http://192.168.0.38:81/stream"
+ESP32_URL = "http://172.20.10.2:81/stream"
 
 target_devices = {
     "290D0DE6-BFC1-D0B7-A8B4-845862F094CE": None,  # 設備1
-    "6BBBBE46-E627-92F7-7299-8DE80626783E": None   # 設備2
+    "6BBBBE46-E627-92F7-7299-8DE80626783E": None  # 設備2  
 }
 last_detected_time = {addr: None for addr in target_devices}  # 記錄每個設備最後更新 RSSI 的時間
 RSSI_TIMEOUT = 3.0  # 若超過此秒數未更新 RSSI，則視為 None
 
 
-turning_radius=60
-wheel_radius=55
+turning_radius=150
+wheel_radius=27.5
 # 初始化
 pygame.init()
 pygame.joystick.init()
@@ -67,6 +67,76 @@ BUTTON_NAMES = {
     16: "Button1",  # 新按鍵3
     17: "Button2",  # 新按鍵4
 }
+
+def Triangulation_control(RSSI1, RSSI2, RSSI3):
+    # 檢查是否有任一 RSSI 是 None
+    if RSSI1 is None or RSSI2 is None or RSSI3 is None:
+        print("⚠️ RSSI 資料不完整，停止移動")
+        return 0, 0, 0
+
+    def trilateration(P1, P2, P3, d1, d2, d3):
+        x1, y1 = P1
+        x2, y2 = P2
+        x3, y3 = P3
+
+        A = np.array([
+            [2 * (x2 - x1), 2 * (y2 - y1)],
+            [2 * (x3 - x1), 2 * (y3 - y1)]
+        ])
+
+        B = np.array([
+            d1**2 - d2**2 + x2**2 - x1**2 + y2**2 - y1**2,
+            d1**2 - d3**2 + x3**2 - x1**2 + y3**2 - y1**2
+        ])
+
+        pos = np.linalg.inv(A).dot(B)
+        x, y = pos
+
+        distance = np.sqrt(x**2 + y**2)
+
+        # 轉換角度：車頭為 0 度、順時針為正
+        angle_rad = math.atan2(y, x)
+        angle_deg = (90 - math.degrees(angle_rad)) % 360
+
+        return x, y, distance, angle_deg
+
+    def compute_angular_velocity(target_angle_deg, current_heading_deg=0.0, k=0.01):
+        angle_error = target_angle_deg - current_heading_deg
+        angle_error = (angle_error + 180) % 360 - 180
+        omega = k * angle_error
+        return omega, angle_error
+
+    def compute_linear_velocity(distance, angle_error_deg, angle_tolerance_deg=5, max_speed=1.0, k_v=0.5):
+        if abs(angle_error_deg) < angle_tolerance_deg:
+            velocity = min(k_v * distance, max_speed)
+        else:
+            velocity = 0.0
+        return velocity
+
+    angle_tolerance = 5
+    p1 = (0, 0)
+    p2 = (3, 0)
+    p3 = (0, 4)
+
+    # 三角定位
+    x, y, distance, angle = trilateration(p1, p2, p3, RSSI1, RSSI2, RSSI3)
+
+    # 控制計算
+    omega, angle_error = compute_angular_velocity(angle)
+    velocity = compute_linear_velocity(distance, angle_error, angle_tolerance)
+
+    """
+    print(f"目標座標: ({x:.2f}, {y:.2f})")
+    print(f"距離: {distance:.2f} m")
+    print(f"角度（相對車頭順時針）: {angle:.2f}°")
+    print(f"角度誤差: {angle_error:.2f}°")
+    print(f"角速度 ω: {omega:.4f} rad/s")
+    print(f"前進速度 V: {velocity:.2f} m/s")
+    """
+    # === 狀態輸出 ===
+
+
+    return velocity, 0, omega
 
 # 轉換函數
 def get_frame():
@@ -119,35 +189,11 @@ def l298n(Vfl, Vfr, Vrl, Vrr):
         if V == 0:
             return [0, 0, 0]
         direction = [1, 0] if V > 0 else [0, 1]
-        speed = int(abs(V) / 14.15 * 255)  # 根據 V 計算速度
+        speed = int(abs(V) / 15 * 255)  # 根據 V 計算速度
         return direction + [to_bytes(speed)]
     return motor_control(Vfl) + motor_control(Vfr) + motor_control(Vrl) + motor_control(Vrr)
 
 def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.09,HFOV = 70.42,VFOV = 43.3):
-    
-    
-    """
-    輸入
-    image_path:影像來源
-    pitch:相機傾斜角度
-    h:相機高度(m)
-    HFOV:相機水平視角角度
-    VFOV:相機垂直視角角度
-
-    輸出
-    透視變換後影像
-    """
-
-    yaw=0
-    roll=0
-
-    frame = image_path
-    if frame is None:
-        print("Error: Could not read image.")
-        return
-
-    interval = 100
-    height, width = frame.shape[:2]
 
     # K矩陣
     def calculate_camera_intrinsics(W, H, HFOV, VFOV):
@@ -205,17 +251,6 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.
 
         return np.array(list(zip(X_w_test, Y_w_test)), dtype=np.float32)
 
-    def mesh_point_draw(po, resulttt, num=2):
-        cv2.circle(resulttt, po, 1, (0, 0, 255), -1)
-        world_coord = pixel_to_world(po[0], po[1], K, R, h)
-        cv2.putText(resulttt, str(tuple(round(coord, num) for coord in world_coord)), (po[0] + 5, po[1] - 5),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1, cv2.LINE_AA)
-
-    def save_frame(name, show_name, photo):
-        current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
-        cv2.imwrite(f"/Users/prince_lego/Desktop/AAAA/{name}/{name}_{current_time}.jpg", photo)
-        cv2.imshow(show_name, photo)
-
     K = calculate_camera_intrinsics(width, height, HFOV, VFOV)
     R = rotation_matrix(np.deg2rad(yaw), np.deg2rad(pitch), np.deg2rad(roll))
 
@@ -231,80 +266,26 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.
                         pixel_to_world(width, height, K, R, h)],    # 右下
                     dtype=np.float32)
 
+    yaw=0
+    roll=0
+
+    frame = image_path
+    if frame is None:
+        print("Error: Could not read image.")
+        return
+
+    height, width = frame.shape[:2]
     dst_pts = output_pixel_num(dst_pts)
 
     M = cv2.getPerspectiveTransform(src_pts, dst_pts)
 
     result = cv2.warpPerspective(frame, M, (width, height))
-    result_mesh = result.copy()
-    result_gps = result.copy()
-
-    focus_point = (int(width / 2), int(height / 2))
-
-    def world_to_pixel(X_w, Y_w, K, R, h):
-        #轉換世界座標到相機坐標系
-        X_c = np.array([X_w, Y_w, h])  #假設物體在地面，高度為 h
-
-        #計算相機坐標到歪斜相機視角的變換
-        X_n = np.linalg.inv(R) @ X_c
-
-        #投影到 2D 平面
-        uv1 = K @ X_n
-        u = uv1[0] / uv1[2]  #正規化 x
-        v = height - (uv1[1] / uv1[2])  #正規化 y，調整成 OpenCV 影像座標
-
-        return int(u), int(v)  #返回整數像素座標
-
-    # 繪製網格與交點
-    for x in range(focus_point[0], width, interval):
-        cv2.line(result_mesh, (x, 0), (x, height), (0, 0, 0), 1) 
-        cv2.line(result_gps, (x, 0), (x, height), (0, 0, 0), 1)  
-    for x in range(focus_point[0], 0, -interval):
-        cv2.line(result_mesh, (x, 0), (x, height), (0, 0, 0), 1)  
-        cv2.line(result_gps, (x, 0), (x, height), (0, 0, 0), 1)  
-    for y in range(focus_point[1], height, interval):
-        cv2.line(result_mesh, (0, y), (width, y), (0, 0, 0), 1)
-        cv2.line(result_gps, (0, y), (width, y), (0, 0, 0), 1) 
-    for y in range(focus_point[1], 0, -interval):
-        cv2.line(result_mesh, (0, y), (width, y), (0, 0, 0), 1) 
-        cv2.line(result_gps, (0, y), (width, y), (0, 0, 0), 1)
-
-    # 標記交點
-    for x in range(focus_point[0], width, interval):
-        for y in range(focus_point[1], height, interval):
-            mesh_point_draw((x, y), result_mesh)
-        for y in range(focus_point[1], 0, -interval):
-            mesh_point_draw((x, y), result_mesh)
-
-    for x in range(focus_point[0], 0, -interval):
-        for y in range(focus_point[1], height, interval):
-            mesh_point_draw((x, y), result_mesh)
-        for y in range(focus_point[1], 0, -interval):
-            mesh_point_draw((x, y), result_mesh)
-
-    u, v = world_to_pixel(0, 0, K, R, h)
-
-    # 在影像上標示該點
-    cv2.circle(result_mesh, (u, v), 5, (0, 255, 0), -1)  # 綠色點
-    cv2.putText(result_mesh, "(0,0)", (u + 10, v - 10), 
-    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
 
     return result
 
 # 監控影像可在此關閉
 def detect_lane_angle_and_offset(image, y_heights):
 
-    """
-
-    影像處理參數可視情況調整
-
-    輸入
-    image:影像來源
-    y_heights:偵測標線位置
-
-    輸出
-    角度差、距離差
-    """
 
     height, width = image.shape[:2]
     center_x = width // 2  
@@ -516,9 +497,12 @@ async def rssi_return():
     # 顯示結果
     rssi_1 = target_devices["290D0DE6-BFC1-D0B7-A8B4-845862F094CE"]
     rssi_2 = target_devices["6BBBBE46-E627-92F7-7299-8DE80626783E"]
-    print(f"RSSI 1: {rssi_1 if rssi_1 is not None else 'None'} dBm | RSSI 2: {rssi_2 if rssi_2 is not None else 'None'} dBm")
+    rssi_3 = target_devices["6BBBBE46-E627-92F7-7299-8DE80626783E"]
+    print(f"RSSI 1: {rssi_1 if rssi_1 is not None else 'None'} dBm | RSSI 2: {rssi_2 if rssi_2 is not None else 'None'} dBm| RSSI 2: {rssi_3 if rssi_3 is not None else 'None'} dBm")
 
     await asyncio.sleep(0.2)  # 掃描間隔
+
+    return rssi_1,rssi_2,rssi_3
 
 async def send_motor_commands():
 
@@ -555,10 +539,9 @@ async def send_motor_commands():
             Right= button_states.get("Right", 0)
 
             if  mode0 == True and not choose_mode:
-                data = [0,0,0 ,0,0,0 ,0,0,0 ,0,0,0]
-                packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
-                await client.write_gatt_char(characteristic_uuid, packed_data)
-                print(f"發送: {list(data)}")
+                Vx_out=0
+                Vy_out=0
+                omega_out=0
                 await asyncio.sleep(0.2)
 
 
@@ -575,11 +558,13 @@ async def send_motor_commands():
 
             if  mode1 == True:
                 # 計算速度
-                ss, direction, vx, vy, omega = get_speed(R2_Trigger, Right_X, Right_Y, 0, 10, Left_X, 3)
-                Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega,turning_radius,wheel_radius)
+                ss, direction, Vx_out,Vy_out,omega_out = get_speed(R2_Trigger, Right_X, Right_Y, 0, 250, Left_X, 3)
+                Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
                 data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
                 packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
+                
                 await client.write_gatt_char(characteristic_uuid, packed_data)
+
                 print(f"發送: {list(data)}")
                 await asyncio.sleep(0.2)
 
@@ -591,16 +576,26 @@ async def send_motor_commands():
                     processed_image, angle_differences, offset = detect_lane_angle_and_offset(result,[150,300])
                     Vx_out,Vy_out,omega_out = calculate_mecanum_wheel_speeds(angle_differences, offset)
                     cv2.imshow("ESP32-CAM Stream", frame)
-                    Vfl, Vfr, Vrl, Vrr = mecanum_v(vx, vy, omega,turning_radius,wheel_radius)
+                    Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
                     data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
                     packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
+                    
                     await client.write_gatt_char(characteristic_uuid, packed_data)
+
                     print(f"發送: {list(data)}")
 
                 await asyncio.sleep(0.2)
 
             if  mode3 == True:
-                await rssi_return()
+                rssi_value1,rssi_value2,rssi_value3 = await rssi_return()
+                Vx_out,Vy_out,omega_out =Triangulation_control(rssi_value1,rssi_value2,rssi_value3)
+                Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
+                data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
+                packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
+                
+                await client.write_gatt_char(characteristic_uuid, packed_data)
+
+                print(f"發送: {list(data)}")
                 await asyncio.sleep(0.2)
 
             if  mode4 == True:
@@ -638,12 +633,15 @@ async def send_motor_commands():
                 mode2 = False
                 mode3 = False
                 mode4 = False
+                choose_mode = False
                 cv2.destroyAllWindows()
 
             if Select == 1:
                 print("檢測到 Select 按鍵被按下，程式將退出")
                 running = False
             
+
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(send_motor_commands())

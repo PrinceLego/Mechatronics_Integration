@@ -2,7 +2,7 @@ import cv2
 import requests
 import numpy as np
 
-ESP32_URL = "http://192.168.0.38:81/stream"
+ESP32_URL = "http://172.20.10.2:81/stream"
 
 def get_frame():
     try:

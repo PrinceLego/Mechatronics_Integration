@@ -23,17 +23,28 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
         raise ValueError("angle_input 和 position_input 長度必須一致")
 
     # 定義模糊輸入變數
-    angle = ctrl.Antecedent(np.arange(-30, 30.1, 0.1), 'angle')
-    position = ctrl.Antecedent(np.arange(-50, 50, 0.1), 'position')
+    angle = ctrl.Antecedent(np.arange(-30, 30, 0.01), 'angle')
+    position = ctrl.Antecedent(np.arange(-50, 50, 0.01), 'position')
 
     # 定義輸出變數
-    Vx = ctrl.Consequent(np.arange(0, 200, 0.1), 'Vx')
-    Vy = ctrl.Consequent(np.arange(-50, 50, 0.1), 'Vy')
-    omega = ctrl.Consequent(np.arange(-20, 20, 0.1), 'omega')
+    Vx = ctrl.Consequent(np.arange(0, 200, 0.01), 'Vx')
+    Vy = ctrl.Consequent(np.arange(-50, 50, 0.01), 'Vy')
+    omega = ctrl.Consequent(np.arange(-20, 20, 0.01), 'omega')
 
     # 隸屬函數定義
-    angle.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
-    position.automf(5, names=['BL', 'SL', 'Z', 'SR', 'BR'])
+    # 角度範圍 [-30, 30]
+    angle['BL'] = fuzz.trapmf(angle.universe, [-30, -30, -25, -15])
+    angle['SL'] = fuzz.trimf(angle.universe, [-25, -15, 0])
+    angle['Z']  = fuzz.trimf(angle.universe, [-5, 0, 5])
+    angle['SR'] = fuzz.trimf(angle.universe, [0, 15, 25])
+    angle['BR'] = fuzz.trapmf(angle.universe, [15, 25, 30, 30])
+
+    # 位置範圍 [-50, 50]
+    position['BL'] = fuzz.trapmf(position.universe, [-50, -50, -35, -20])
+    position['SL'] = fuzz.trimf(position.universe, [-35, -20, 0])
+    position['Z']  = fuzz.trimf(position.universe, [-10, 0, 10])
+    position['SR'] = fuzz.trimf(position.universe, [0, 20, 35])
+    position['BR'] = fuzz.trapmf(position.universe, [20, 35, 50, 50])
 
     Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 50, 100])
     Vx['M'] = fuzz.trimf(Vx.universe, [50, 100, 150])
@@ -106,10 +117,12 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
 
     Vx_out = np.mean(sorted(Vx_results)[:cutoff]) if Vx_results else 0
     Vy_out = np.mean(sorted(Vy_results)[:cutoff]) if Vy_results else 0
-    omega_out = np.mean(sorted(omega_results)[-cutoff:]) if omega_results else 0
+    omega_out = np.mean(sorted(omega_results)[:cutoff])if omega_results else 0
 
 
-    #"""
+    """
+
+
     #角度的隸屬函數
     plt.figure()
     plt.plot(angle.universe, angle['BL'].mf, label='BL')
@@ -177,19 +190,19 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.tight_layout()                                      
     plt.show()
-    #"""
 
+    """
     return {"Vx": Vx_out, "Vy": Vy_out, "omega": omega_out}
 
 
 
-angles = [5, -2, 0, 3]
-positions = [1, -4, 0, 2]
+angles = [15,5,20]
+positions = [30,40,10]
 
 output = calculate_mecanum_wheel_speeds(angles, positions)
 print(f"Vx: {output['Vx']:.2f}, Vy: {output['Vy']:.2f}, Omega: {output['omega']:.2f}")
 
-#"""
+"""
 angle_range = np.linspace(-30, 30, 50)
 position_range = np.linspace(-50, 50, 50)
 
@@ -386,3 +399,4 @@ fig.colorbar(surf, shrink=0.5, aspect=10)
 # 顯示圖
 plt.tight_layout()
 plt.show()
+"""
