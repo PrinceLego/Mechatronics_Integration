@@ -23,76 +23,76 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
         raise ValueError("angle_input 和 position_input 長度必須一致")
 
     # 定義模糊輸入變數
-    angle = ctrl.Antecedent(np.arange(-30, 30, 0.01), 'angle')
+    angle = ctrl.Antecedent(np.arange(-60, 60, 0.01), 'angle')
     position = ctrl.Antecedent(np.arange(-50, 50, 0.01), 'position')
 
     # 定義輸出變數
-    Vx = ctrl.Consequent(np.arange(0, 200, 0.01), 'Vx')
-    Vy = ctrl.Consequent(np.arange(-50, 50, 0.01), 'Vy')
+    Vx = ctrl.Consequent(np.arange(0, 150, 0.01), 'Vx')
+    Vy = ctrl.Consequent(np.arange(-30, 30, 0.01), 'Vy')
     omega = ctrl.Consequent(np.arange(-20, 20, 0.01), 'omega')
 
     # 隸屬函數定義
     # 角度範圍 [-30, 30]
-    angle['BL'] = fuzz.trapmf(angle.universe, [-30, -30, -25, -15])
+    angle['BL'] = fuzz.trapmf(angle.universe, [-60, -60, -25, -15])
     angle['SL'] = fuzz.trimf(angle.universe, [-25, -15, 0])
     angle['Z']  = fuzz.trimf(angle.universe, [-5, 0, 5])
     angle['SR'] = fuzz.trimf(angle.universe, [0, 15, 25])
-    angle['BR'] = fuzz.trapmf(angle.universe, [15, 25, 30, 30])
+    angle['BR'] = fuzz.trapmf(angle.universe,  [15, 25, 60, 60])
 
     # 位置範圍 [-50, 50]
     position['BL'] = fuzz.trapmf(position.universe, [-50, -50, -35, -20])
-    position['SL'] = fuzz.trimf(position.universe, [-35, -20, 0])
+    position['SL'] = fuzz.trimf(position.universe,[-35, -20, 0])
     position['Z']  = fuzz.trimf(position.universe, [-10, 0, 10])
     position['SR'] = fuzz.trimf(position.universe, [0, 20, 35])
-    position['BR'] = fuzz.trapmf(position.universe, [20, 35, 50, 50])
+    position['BR'] = fuzz.trapmf(position.universe,  [25 ,35 ,50 ,50])
 
-    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 50, 100])
-    Vx['M'] = fuzz.trimf(Vx.universe, [50, 100, 150])
-    Vx['F'] = fuzz.trapmf(Vx.universe, [100, 150, 200, 200])
+    Vx['S'] = fuzz.trapmf(Vx.universe, [0, 0, 50, 80])
+    Vx['M'] = fuzz.trimf(Vx.universe, [50 ,80 ,100])
+    Vx['F'] = fuzz.trapmf(Vx.universe, [80 ,100, 150, 150])
 
-    Vy['LL'] = fuzz.trapmf(Vy.universe, [-50, -50, -40, -20])
-    Vy['L'] = fuzz.trimf(Vy.universe, [-30, -15, 0])
-    Vy['Z'] = fuzz.trimf(Vy.universe, [-15, 0, 15])
-    Vy['R'] = fuzz.trimf(Vy.universe, [0, 15, 30])
-    Vy['RR'] = fuzz.trapmf(Vy.universe, [20, 40, 50, 50])
+    Vy['LL'] = fuzz.trapmf(Vy.universe, [-30 ,-30 ,-20 ,-12])
+    Vy['L'] = fuzz.trimf(Vy.universe, [-16 ,-12, 0])
+    Vy['Z'] = fuzz.trimf(Vy.universe,  [-14 ,0, 14])
+    Vy['R'] = fuzz.trimf(Vy.universe, [0 ,12 ,16])
+    Vy['RR'] = fuzz.trapmf(Vy.universe, [12, 20, 30 ,30])
 
-    omega['CCW2'] = fuzz.trapmf(omega.universe, [-20, -20, -15, -10])
-    omega['CCW'] = fuzz.trimf(omega.universe, [-15, -10, 0])
-    omega['Z'] = fuzz.trimf(omega.universe, [-10, 0, 10])
-    omega['CW'] = fuzz.trimf(omega.universe, [0, 10, 15])
-    omega['CW2'] = fuzz.trapmf(omega.universe, [10, 15, 20, 20])
+    omega['CCW2'] = fuzz.trapmf(omega.universe, [-20 ,-20, -10, -8])
+    omega['CCW'] = fuzz.trimf(omega.universe,[-10 ,-4 ,0])
+    omega['Z'] = fuzz.trimf(omega.universe,[-4 ,0 ,4])
+    omega['CW'] = fuzz.trimf(omega.universe,  [0 ,4 ,10])
+    omega['CW2'] = fuzz.trapmf(omega.universe, [8 ,10 ,20, 20])
 
     # 規則定義（你已有的可維持不變）
     rules = [
-        ctrl.Rule((angle['BL'] & position['BL']), (Vx['S'], Vy['RR'], omega['CW2'])),
-        ctrl.Rule((angle['SL'] & position['BL']), (Vx['S'], Vy['RR'], omega['CW'])),
-        ctrl.Rule((angle['Z'] & position['BL']), (Vx['M'], Vy['RR'], omega['Z'])),
-        ctrl.Rule((angle['SR'] & position['BL']), (Vx['S'], Vy['RR'], omega['CCW'])),
-        ctrl.Rule((angle['BR'] & position['BL']), (Vx['S'], Vy['RR'], omega['CCW2'])),
+        ctrl.Rule((angle['BL'] & position['BL']), (Vx['S'], Vy['LL'], omega['CCW2'])),
+        ctrl.Rule((angle['SL'] & position['BL']), (Vx['S'], Vy['LL'], omega['CCW'])),
+        ctrl.Rule((angle['Z'] & position['BL']), (Vx['M'], Vy['LL'], omega['Z'])),
+        ctrl.Rule((angle['SR'] & position['BL']), (Vx['S'], Vy['LL'], omega['CW'])),
+        ctrl.Rule((angle['BR'] & position['BL']), (Vx['S'], Vy['LL'], omega['CW2'])),
                 
-        ctrl.Rule((angle['BL'] & position['SL']), (Vx['S'], Vy['R'], omega['CW2'])),
-        ctrl.Rule((angle['SL'] & position['SL']), (Vx['M'], Vy['R'], omega['CW'])),
-        ctrl.Rule((angle['Z'] & position['SL']), (Vx['F'], Vy['R'], omega['Z'])),
-        ctrl.Rule((angle['SR'] & position['SL']), (Vx['M'], Vy['R'], omega['CCW'])),
-        ctrl.Rule((angle['BR'] & position['SL']), (Vx['S'], Vy['R'], omega['CCW2'])),
+        ctrl.Rule((angle['BL'] & position['SL']), (Vx['S'], Vy['L'], omega['CCW2'])),
+        ctrl.Rule((angle['SL'] & position['SL']), (Vx['M'], Vy['L'], omega['CCW'])),
+        ctrl.Rule((angle['Z'] & position['SL']), (Vx['F'], Vy['L'], omega['Z'])),
+        ctrl.Rule((angle['SR'] & position['SL']), (Vx['M'], Vy['L'], omega['CW'])),
+        ctrl.Rule((angle['BR'] & position['SL']), (Vx['S'], Vy['L'], omega['CW2'])),
                 
-        ctrl.Rule((angle['BL'] & position['Z']), (Vx['S'], Vy['Z'], omega['CW2'])),
-        ctrl.Rule((angle['SL'] & position['Z']), (Vx['F'], Vy['Z'], omega['CW'])),
+        ctrl.Rule((angle['BL'] & position['Z']), (Vx['S'], Vy['Z'], omega['CCW2'])),
+        ctrl.Rule((angle['SL'] & position['Z']), (Vx['F'], Vy['Z'], omega['CCW'])),
         ctrl.Rule((angle['Z'] & position['Z']), (Vx['F'], Vy['Z'], omega['Z'])),
-        ctrl.Rule((angle['SR'] & position['Z']), (Vx['F'], Vy['Z'], omega['CCW'])),
-        ctrl.Rule((angle['BR'] & position['Z']), (Vx['S'], Vy['Z'], omega['CCW2'])),
+        ctrl.Rule((angle['SR'] & position['Z']), (Vx['F'], Vy['Z'], omega['CW'])),
+        ctrl.Rule((angle['BR'] & position['Z']), (Vx['S'], Vy['Z'], omega['CW2'])),
                 
-        ctrl.Rule((angle['BL'] & position['SR']), (Vx['S'], Vy['L'], omega['CW2'])),
-        ctrl.Rule((angle['SL'] & position['SR']), (Vx['M'], Vy['L'], omega['CW'])),
-        ctrl.Rule((angle['Z'] & position['SR']), (Vx['F'], Vy['L'], omega['Z'])),
-        ctrl.Rule((angle['SR'] & position['SR']), (Vx['M'], Vy['L'], omega['CCW'])),
-        ctrl.Rule((angle['BR'] & position['SR']), (Vx['S'], Vy['L'], omega['CCW2'])),
+        ctrl.Rule((angle['BL'] & position['SR']), (Vx['S'], Vy['R'], omega['CCW2'])),
+        ctrl.Rule((angle['SL'] & position['SR']), (Vx['M'], Vy['R'], omega['CCW'])),
+        ctrl.Rule((angle['Z'] & position['SR']), (Vx['F'], Vy['R'], omega['Z'])),
+        ctrl.Rule((angle['SR'] & position['SR']), (Vx['M'], Vy['R'], omega['CW'])),
+        ctrl.Rule((angle['BR'] & position['SR']), (Vx['S'], Vy['R'], omega['CW2'])),
                 
-        ctrl.Rule((angle['BL'] & position['BR']), (Vx['S'], Vy['LL'], omega['CW2'])),
-        ctrl.Rule((angle['SL'] & position['BR']), (Vx['S'], Vy['LL'], omega['CW'])),
-        ctrl.Rule((angle['Z'] & position['BR']), (Vx['M'], Vy['LL'], omega['Z'])),
-        ctrl.Rule((angle['SR'] & position['BR']), (Vx['S'], Vy['LL'], omega['CCW'])),
-        ctrl.Rule((angle['BR'] & position['BR']), (Vx['S'], Vy['LL'], omega['CCW2'])),
+        ctrl.Rule((angle['BL'] & position['BR']), (Vx['S'], Vy['RR'], omega['CCW2'])),
+        ctrl.Rule((angle['SL'] & position['BR']), (Vx['S'], Vy['RR'], omega['CCW'])),
+        ctrl.Rule((angle['Z'] & position['BR']), (Vx['M'], Vy['RR'], omega['Z'])),
+        ctrl.Rule((angle['SR'] & position['BR']), (Vx['S'], Vy['RR'], omega['CW'])),
+        ctrl.Rule((angle['BR'] & position['BR']), (Vx['S'], Vy['RR'], omega['CW2'])),
     ]
 
     control_system = ctrl.ControlSystem(rules)
@@ -120,7 +120,7 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     omega_out = np.mean(sorted(omega_results)[:cutoff])if omega_results else 0
 
 
-    """
+    #"""
 
 
     #角度的隸屬函數
@@ -191,7 +191,7 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     plt.tight_layout()                                      
     plt.show()
 
-    """
+    #"""
     return {"Vx": Vx_out, "Vy": Vy_out, "omega": omega_out}
 
 

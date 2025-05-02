@@ -28,18 +28,18 @@ function [Vx_out, Vy_out, Omega_out]  = fuzzy_control_system(angles, positions)
     fis = addMF(fis, 'Vx', 'trapmf', [80 ,100, 150, 150], 'Name', 'F');
 
     fis = addOutput(fis, [-30 30], 'Name', 'Vy'); % index 2
-    fis = addMF(fis, 'Vy', 'trapmf', [-30 ,-30 ,-20, -12], 'Name', 'LL');
+    fis = addMF(fis, 'Vy', 'trapmf', [-30 ,-30 ,-20, -16], 'Name', 'LL');
     fis = addMF(fis, 'Vy', 'trimf', [-16 ,-12, 0], 'Name', 'L');
     fis = addMF(fis, 'Vy', 'trimf', [-14 ,0, 14], 'Name', 'Z');
-    fis = addMF(fis, 'Vy', 'trimf', [0 ,12 ,16], 'Name', 'R');
-    fis = addMF(fis, 'Vy', 'trapmf', [12, 20, 30 ,30], 'Name', 'RR');
+    fis = addMF(fis, 'Vy', 'trimf', [0 12 ,16], 'Name', 'R');
+    fis = addMF(fis, 'Vy', 'trapmf', [16 20 30 30], 'Name', 'RR');
 
     fis = addOutput(fis, [-20 20], 'Name', 'Omega'); % index 3
-    fis = addMF(fis, 'Omega', 'trapmf', [-20 ,-20, -10, -8], 'Name', 'CCW2');
-    fis = addMF(fis, 'Omega', 'trimf', [-10 ,-4 ,0], 'Name', 'CCW');
-    fis = addMF(fis, 'Omega', 'trimf', [-4 ,0 ,4], 'Name', 'Z');
-    fis = addMF(fis, 'Omega', 'trimf', [0 ,4 ,10], 'Name', 'CW');
-    fis = addMF(fis, 'Omega', 'trapmf', [8 ,10 ,20, 20], 'Name', 'CW2');
+    fis = addMF(fis, 'Omega', 'trapmf', [-20 -20 -10 -8], 'Name', 'CCW2');
+    fis = addMF(fis, 'Omega', 'trimf', [-10 -4 0], 'Name', 'CCW');
+    fis = addMF(fis, 'Omega', 'trimf', [-4 0 4], 'Name', 'Z');
+    fis = addMF(fis, 'Omega', 'trimf', [0 4 10], 'Name', 'CW');
+    fis = addMF(fis, 'Omega', 'trapmf', [8 10 20 20], 'Name', 'CW2');
     
     %% === 規則 ===
      ruleList = [
