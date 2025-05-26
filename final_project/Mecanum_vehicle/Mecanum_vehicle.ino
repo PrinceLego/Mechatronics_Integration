@@ -1,15 +1,15 @@
-#define EN1 2   // L298N Enable A
-#define IN1 3   // L298N Motor A IN1
-#define IN2 4   // L298N Motor A IN2
-#define EN2 5   // L298N Enable B
-#define IN3 6  // L298N Motor B IN3
-#define IN4 7  // L298N Motor B IN4
-#define EN3 8   // L298N Enable A
+#define EN1 5   // L298N Enable A
+#define IN1 13   // L298N Motor A IN1
+#define IN2 12   // L298N Motor A IN2
+#define EN2 4   // L298N Enable B
+#define IN3 11  // L298N Motor B IN3
+#define IN4 10  // L298N Motor B IN4
+#define EN3 3   // L298N Enable A
 #define IN5 9   // L298N Motor A IN1
-#define IN6 10   // L298N Motor A IN2
-#define EN4 11   // L298N Enable B
-#define IN7 12  // L298N Motor B IN3
-#define IN8 13  // L298N Motor B IN4
+#define IN6 8   // L298N Motor A IN2
+#define EN4 2   // L298N Enable B
+#define IN7 7  // L298N Motor B IN3
+#define IN8 6  // L298N Motor B IN4
 
 uint8_t receivedValues[12]; // 使用 uint8_t 確保數據正確
 
@@ -69,10 +69,6 @@ void controlMotors(uint8_t values[]) {
 }
 
 void stopMotors() {
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, LOW);
-    digitalWrite(IN3, LOW);
-    digitalWrite(IN4, LOW);
-    analogWrite(ENA, 0);
-    analogWrite(ENB, 0);
+    uint8_t stopValues[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    controlMotors(stopValues);
 }

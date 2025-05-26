@@ -11,6 +11,7 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import matplotlib.pyplot as plt
 from bleak import BleakScanner
+from datetime import datetime
 
 # BLE 設定
 device_address = "6BBBBE46-E627-92F7-7299-8DE80626783E"  # 設備 UUID
@@ -18,8 +19,10 @@ characteristic_uuid = "0000ffe1-0000-1000-8000-00805f9b34fb"  # 特徵 UUID
 ESP32_URL = "http://172.20.10.2:81/stream"
 
 target_devices = {
-    "290D0DE6-BFC1-D0B7-A8B4-845862F094CE": None,  # 設備1
-    "6BBBBE46-E627-92F7-7299-8DE80626783E": None  # 設備2  
+    "F1D0CFB7-D579-182D-ADFC-AC9EF7549547": None,  # 設備1
+    "7C245558-0A16-354D-38C6-6CD15AD071F5": None,  # 設備2  
+    "BD74F592-3E2D-2233-41A0-A268973E9653": None  # 設備2 
+
 }
 last_detected_time = {addr: None for addr in target_devices}  # 記錄每個設備最後更新 RSSI 的時間
 RSSI_TIMEOUT = 3.0  # 若超過此秒數未更新 RSSI，則視為 None
@@ -68,10 +71,30 @@ BUTTON_NAMES = {
     17: "Button2",  # 新按鍵4
 }
 
+class KalmanFilter:
+    def __init__(self, Q=1e-3, R=1, initial_value=0):
+        self.Q = Q  # 過程噪聲協方差
+        self.R = R  # 觀測噪聲協方差
+        self.x = initial_value  # 初始估計值
+        self.P = 1  # 初始估計誤差
+
+    def update(self, measurement):
+        # 預測步驟
+        self.P = self.P + self.Q
+
+        # 更新步驟
+        K = self.P / (self.P + self.R)
+        self.x = self.x + K * (measurement - self.x)
+        self.P = (1 - K) * self.P
+
+        return self.x
+
+
 def Triangulation_control(RSSI1, RSSI2, RSSI3):
     # 檢查是否有任一 RSSI 是 None
     if RSSI1 is None or RSSI2 is None or RSSI3 is None:
-        print("⚠️ RSSI 資料不完整，停止移動")
+
+        print(" RSSI 資料不完整，停止移動")
         return 0, 0, 0
 
     def trilateration(P1, P2, P3, d1, d2, d3):
@@ -106,25 +129,28 @@ def Triangulation_control(RSSI1, RSSI2, RSSI3):
         omega = k * angle_error
         return omega, angle_error
 
-    def compute_linear_velocity(distance, angle_error_deg, angle_tolerance_deg=5, max_speed=1.0, k_v=0.5):
-        if abs(angle_error_deg) < angle_tolerance_deg:
+    def compute_linear_velocity(distance, angle_error_deg, angle_tolerance_deg=5, max_speed=1.0, k_v=0.5, min_distance_to_move=3.0):
+        if abs(angle_error_deg) < angle_tolerance_deg and distance > min_distance_to_move:
             velocity = min(k_v * distance, max_speed)
         else:
             velocity = 0.0
         return velocity
+    
+
 
     angle_tolerance = 5
-    p1 = (0, 0)
-    p2 = (3, 0)
-    p3 = (0, 4)
+    p1 = (10.392, 6)#f1
+    p2 = (-10.392, 6)#7c
+    p3 = (0, -12)#bd
 
     # 三角定位
-    x, y, distance, angle = trilateration(p1, p2, p3, RSSI1, RSSI2, RSSI3)
+    x, y, distance, angle = trilateration(p1, p2, p3, -RSSI1, -RSSI2, -RSSI3)
 
     # 控制計算
     omega, angle_error = compute_angular_velocity(angle)
     velocity = compute_linear_velocity(distance, angle_error, angle_tolerance)
-
+    print(distance, angle_error)
+    log_rssi_to_txt(distance, angle_error)
     """
     print(f"目標座標: ({x:.2f}, {y:.2f})")
     print(f"距離: {distance:.2f} m")
@@ -177,10 +203,14 @@ def get_speed(v, x, y, vmin, vmax, o, omax):
     return speed, angle, vx, vy, omega
 
 def mecanum_v(vx, vy, omega,R,r):
-    omega=np.deg2rad(omega)
-    return (vx - vy - omega*R)/r, (vx + vy + omega*R)/r, (vx + vy - omega*R)/r, (vx - vy + omega*R)/r
+    #Vfr, Vfl, Vrr, Vrl
+    if omega>5:
+        vx=0
+        vy=0
 
-def l298n(Vfl, Vfr, Vrl, Vrr):
+    return (vx + vy - omega*R)/r, (vx - vy + omega*R)/r, (vx - vy - omega*R)/r, (vx + vy + omega*R)/r
+
+def l298n(Vfr, Vfl, Vrr, Vrl):
     def to_bytes(value):
         # 限制數值範圍在 0 到 255 
         return min(max(0, value), 255)
@@ -188,12 +218,24 @@ def l298n(Vfl, Vfr, Vrl, Vrr):
     def motor_control(V):
         if V == 0:
             return [0, 0, 0]
+        
         direction = [1, 0] if V > 0 else [0, 1]
         speed = int(abs(V) / 15 * 255)  # 根據 V 計算速度
         return direction + [to_bytes(speed)]
-    return motor_control(Vfl) + motor_control(Vfr) + motor_control(Vrl) + motor_control(Vrr)
+    return motor_control(Vfr) + motor_control(Vfl) + motor_control(Vrr) + motor_control(Vrl)
 
 def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.09,HFOV = 70.42,VFOV = 43.3):
+
+
+
+    frame = image_path
+    if frame is None:
+        print("Error: Could not read image.")
+        return
+
+    height, width = frame.shape[:2]
+    yaw=0
+    roll=0
 
     # K矩陣
     def calculate_camera_intrinsics(W, H, HFOV, VFOV):
@@ -269,12 +311,7 @@ def apply_perspective_transform_and_draw_grid_on_image(image_path,pitch=-45,h=0.
     yaw=0
     roll=0
 
-    frame = image_path
-    if frame is None:
-        print("Error: Could not read image.")
-        return
 
-    height, width = frame.shape[:2]
     dst_pts = output_pixel_num(dst_pts)
 
     M = cv2.getPerspectiveTransform(src_pts, dst_pts)
@@ -297,9 +334,9 @@ def detect_lane_angle_and_offset(image, y_heights):
 
     # 顯示前處理影像
 
-    box_width = 70
+    box_width = 40
     box_height = 10
-    n = 20  
+    n = 13  
 
     boxes = []
     image_before_adjustment = image.copy()  
@@ -495,14 +532,20 @@ async def rssi_return():
                 target_devices[address] = None  # 設為 None，代表設備可能離線
 
     # 顯示結果
-    rssi_1 = target_devices["290D0DE6-BFC1-D0B7-A8B4-845862F094CE"]
-    rssi_2 = target_devices["6BBBBE46-E627-92F7-7299-8DE80626783E"]
-    rssi_3 = target_devices["6BBBBE46-E627-92F7-7299-8DE80626783E"]
-    print(f"RSSI 1: {rssi_1 if rssi_1 is not None else 'None'} dBm | RSSI 2: {rssi_2 if rssi_2 is not None else 'None'} dBm| RSSI 2: {rssi_3 if rssi_3 is not None else 'None'} dBm")
+    rssi_1 = target_devices["F1D0CFB7-D579-182D-ADFC-AC9EF7549547"]
+    rssi_2 = target_devices["7C245558-0A16-354D-38C6-6CD15AD071F5"]
+    rssi_3 = target_devices["BD74F592-3E2D-2233-41A0-A268973E9653"]
+    
 
     await asyncio.sleep(0.2)  # 掃描間隔
 
     return rssi_1,rssi_2,rssi_3
+
+def log_rssi_to_txt(rssi_1, rssi_2 ,filename="/Users/prince_lego/Desktop/progarm/LeTaX/Mechatronics_Integration/final_project/Python/angle.txt"):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    with open(filename, "a") as f:
+        f.write(f"{timestamp},{rssi_1},{rssi_2}\n")
+
 
 async def send_motor_commands():
 
@@ -513,6 +556,8 @@ async def send_motor_commands():
         print(f"已成功連接到設備 {device_address}")
         await asyncio.sleep(2)
 
+        kf1 = KalmanFilter(initial_value=-55)
+        prev_rssi1 = prev_rssi2 = prev_rssi3 = -55  # 可依實際預設值調整
 
         running = True
         mode1 = False
@@ -558,9 +603,9 @@ async def send_motor_commands():
 
             if  mode1 == True:
                 # 計算速度
-                ss, direction, Vx_out,Vy_out,omega_out = get_speed(R2_Trigger, Right_X, Right_Y, 0, 250, Left_X, 3)
-                Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
-                data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
+                ss, direction, Vx_out,Vy_out,omega_out = get_speed(R2_Trigger, Right_X, Right_Y, 0, 250, Left_X, 1)
+                Vfr, Vfl, Vrr, Vrl = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
+                data = bytes(l298n(Vfr, Vfl, Vrr, Vrl))
                 packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
                 
                 await client.write_gatt_char(characteristic_uuid, packed_data)
@@ -572,25 +617,48 @@ async def send_motor_commands():
 
                 frame = get_frame()
                 if frame is not None:
-                    result=apply_perspective_transform_and_draw_grid_on_image(frame, -15, 0.1,70.42,43.3)
-                    processed_image, angle_differences, offset = detect_lane_angle_and_offset(result,[150,300])
+                    result=apply_perspective_transform_and_draw_grid_on_image(frame, -45, 0.1,70.42,43.3)
+                    processed_image, angle_differences, offset = detect_lane_angle_and_offset(result,[150,200,100])
                     Vx_out,Vy_out,omega_out = calculate_mecanum_wheel_speeds(angle_differences, offset)
+                    print(f"前進速度: {Vx_out} 側向速度:{Vy_out} 角速度:{omega_out} ")
+                    #print(Vx_out,Vy_out,omega_out)
                     cv2.imshow("ESP32-CAM Stream", frame)
-                    Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
-                    data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
+                    Vfr, Vfl, Vrr, Vrl = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
+                    data = bytes(l298n(Vfr, Vfl, Vrr, Vrl))
+                    data = bytes([0,0,0,0,0,0,0,0,0,0,0,0])
                     packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
                     
                     await client.write_gatt_char(characteristic_uuid, packed_data)
-
+                    data = bytes(l298n(Vfr, Vfl, Vrr, Vrl))
                     print(f"發送: {list(data)}")
 
                 await asyncio.sleep(0.2)
 
             if  mode3 == True:
+
                 rssi_value1,rssi_value2,rssi_value3 = await rssi_return()
+
+                def is_valid(value):
+                    return value is not None and value != 127
+
+                # 若無效則替換為上一個值
+                rssi_value1 = rssi_value1 if is_valid(rssi_value1) else prev_rssi1
+                rssi_value2 = rssi_value2 if is_valid(rssi_value2) else prev_rssi2
+                rssi_value3 = rssi_value3 if is_valid(rssi_value3) else prev_rssi3
+
+                rssi_value1 = kf1.update(rssi_value1)
+                rssi_value2 = kf1.update(rssi_value2)
+                rssi_value3 = kf1.update(rssi_value3)
+                # 更新上一個有效值
+                prev_rssi1, prev_rssi2, prev_rssi3 = rssi_value1, rssi_value2, rssi_value3
+                
                 Vx_out,Vy_out,omega_out =Triangulation_control(rssi_value1,rssi_value2,rssi_value3)
-                Vfl, Vfr, Vrl, Vrr = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
-                data = bytes(l298n(Vfl, Vfr, Vrl, Vrr))
+                #print(rssi_value1,rssi_value2,rssi_value3)
+                
+                Vfr, Vfl, Vrr, Vrl = mecanum_v(Vx_out,Vy_out,omega_out,turning_radius,wheel_radius)
+                
+                data = bytes(l298n(Vfr, Vfl, Vrr, Vrl))
+                data = [0,0,0,0,0,0,0,0,0,0,0,0]
                 packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
                 
                 await client.write_gatt_char(characteristic_uuid, packed_data)
@@ -634,6 +702,10 @@ async def send_motor_commands():
                 mode3 = False
                 mode4 = False
                 choose_mode = False
+                data = bytes([0,0,0,0,0,0,0,0,0,0,0,0])
+                packed_data = struct.pack("<12B", *data)  # 確保是小端序的 uint8_t
+                    
+                await client.write_gatt_char(characteristic_uuid, packed_data)
                 cv2.destroyAllWindows()
 
             if Select == 1:

@@ -62,7 +62,7 @@ def calculate_mecanum_wheel_speeds(angle_input: list[float], position_input: lis
     omega['CW'] = fuzz.trimf(omega.universe,  [0 ,4 ,10])
     omega['CW2'] = fuzz.trapmf(omega.universe, [8 ,10 ,20, 20])
 
-    # 規則定義（你已有的可維持不變）
+    # 規則定義
     rules = [
         ctrl.Rule((angle['BL'] & position['BL']), (Vx['S'], Vy['LL'], omega['CCW2'])),
         ctrl.Rule((angle['SL'] & position['BL']), (Vx['S'], Vy['LL'], omega['CCW'])),
@@ -202,8 +202,8 @@ positions = [30,40,10]
 output = calculate_mecanum_wheel_speeds(angles, positions)
 print(f"Vx: {output['Vx']:.2f}, Vy: {output['Vy']:.2f}, Omega: {output['omega']:.2f}")
 
-"""
-angle_range = np.linspace(-30, 30, 50)
+
+angle_range = np.linspace(-60, 60, 50)
 position_range = np.linspace(-50, 50, 50)
 
 # 建立網格
@@ -259,7 +259,7 @@ plt.show()
 
 
 
-
+"""
 
 
 def mecanum_v(vx, vy, omega,R,r):
